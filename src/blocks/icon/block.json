@@ -1,0 +1,127 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "webentwicklerin/icon",
+  "version": "0.1.0",
+  "title": "Icon",
+  "category": "media",
+  "icon": "star-filled",
+  "description": "Display SVG icons with customizable colors and styling",
+  "keywords": ["icon", "svg", "graphic"],
+  "textdomain": "we-icon-blocks",
+  "attributes": {
+    "iconName": {
+      "type": "string",
+      "default": "arrow-up"
+    },
+    "iconColor": {
+      "type": "string"
+    },
+    "backgroundColor": {
+      "type": "string"
+    },
+    "hoverIconColor": {
+      "type": "string"
+    },
+    "hoverBackgroundColor": {
+      "type": "string"
+    },
+    "width": {
+      "type": "string",
+      "default": "24px"
+    },
+    "height": {
+      "type": "string",
+      "default": "24px"
+    },
+    "linkUrl": {
+      "type": "string"
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
+    },
+    "linkRel": {
+      "type": "string"
+    },
+    "hasText": {
+      "type": "boolean",
+      "default": false
+    },
+    "text": {
+      "type": "string"
+    },
+    "iconPosition": {
+      "type": "string",
+      "default": "left"
+    },
+    "screenReaderOnly": {
+      "type": "boolean",
+      "default": false
+    },
+    "gap": {
+      "type": "string",
+      "default": "0.5em"
+    },
+    "iconBorderWidth": {
+      "type": "string"
+    },
+    "iconBorderStyle": {
+      "type": "string",
+      "default": "solid"
+    },
+    "iconBorderColor": {
+      "type": "string"
+    },
+    "iconBorderRadius": {
+      "type": "string",
+      "default": "4px"
+    },
+    "hoverBorderColor": {
+      "type": "string"
+    },
+    "iconPadding": {
+      "type": "string",
+      "default": "0"
+    },
+    "animation": {
+      "type": "string",
+      "default": "none"
+    }
+  },
+  "supports": {
+    "align": ["left", "center", "right"],
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true,
+      "blockGap": true
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "fontFamily": true,
+      "fontWeight": true,
+      "fontStyle": true,
+      "textTransform": true,
+      "textDecoration": true,
+      "letterSpacing": true,
+      "textAlign": true
+    },
+    "interactivity": {
+      "clientNavigation": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css"
+}

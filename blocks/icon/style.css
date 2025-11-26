@@ -1,0 +1,373 @@
+.wp-block-webentwicklerin-icon {
+    display: flex !important;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.3s ease;
+}
+
+/* Override WordPress float alignment - use flexbox instead for better control */
+.is-layout-constrained > .wp-block-webentwicklerin-icon.alignleft,
+.is-layout-constrained > .wp-block-webentwicklerin-icon.alignright,
+.is-layout-flow > .wp-block-webentwicklerin-icon.alignleft,
+.is-layout-flow > .wp-block-webentwicklerin-icon.alignright {
+	float: none !important;
+	margin-inline-start: 0 !important;
+	margin-inline-end: 0 !important;
+}
+.wp-block-webentwicklerin-icon.aligncenter {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.wp-block-webentwicklerin-icon.alignleft {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.wp-block-webentwicklerin-icon.alignright {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.wp-block-webentwicklerin-icon__link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: inherit;
+	text-decoration: none;
+	width: 100%;
+	gap: 0.5em;
+}
+
+.wp-block-webentwicklerin-icon__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.wp-block-webentwicklerin-icon__inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	/* Icon container - inherit background and border from main block */
+	min-width: 1.5em;
+	min-height: 1.5em;
+	/* Dynamic padding based on icon size - ensures icons have breathing room */
+	padding: var(--icon-padding, 0);
+	box-sizing: border-box;
+	transition: background-color 0.3s ease, border-color 0.3s ease;
+	/* Apply icon-specific background and border */
+	background-color: var(--icon-background-color, transparent);
+	border: var(--we-icon-frame-width, 0) var(--we-icon-frame-style, solid) var(--we-icon-frame-color, transparent);
+	border-radius: var(--we-icon-frame-radius, 4px);
+}
+
+/* Icon Layout Variants */
+.wp-block-webentwicklerin-icon.icon-position-left,
+.wp-block-webentwicklerin-icon.icon-position-right {
+	flex-direction: row;
+}
+
+.wp-block-webentwicklerin-icon.icon-position-right .wp-block-webentwicklerin-icon__link,
+.wp-block-webentwicklerin-icon.icon-position-right {
+	flex-direction: row-reverse;
+}
+
+.wp-block-webentwicklerin-icon.icon-position-top,
+.wp-block-webentwicklerin-icon.icon-position-bottom {
+	flex-direction: column;
+}
+
+.wp-block-webentwicklerin-icon.icon-position-bottom .wp-block-webentwicklerin-icon__link,
+.wp-block-webentwicklerin-icon.icon-position-bottom {
+	flex-direction: column-reverse;
+}
+
+/* Ensure link inherits layout direction from parent */
+.wp-block-webentwicklerin-icon.icon-position-left .wp-block-webentwicklerin-icon__link,
+.wp-block-webentwicklerin-icon.icon-position-right .wp-block-webentwicklerin-icon__link,
+.wp-block-webentwicklerin-icon.icon-position-top .wp-block-webentwicklerin-icon__link,
+.wp-block-webentwicklerin-icon.icon-position-bottom .wp-block-webentwicklerin-icon__link {
+	flex-direction: inherit;
+}
+
+/* Explicit ordering to ensure correct order in frontend regardless of DOM */
+.wp-block-webentwicklerin-icon.icon-position-top .wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon.icon-position-top .wp-block-webentwicklerin-icon__link .wp-block-webentwicklerin-icon__inner { order: 0; }
+.wp-block-webentwicklerin-icon.icon-position-top .icon-text,
+.wp-block-webentwicklerin-icon.icon-position-top .wp-block-webentwicklerin-icon__link .icon-text { order: 1; }
+
+.wp-block-webentwicklerin-icon.icon-position-bottom .wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon.icon-position-bottom .wp-block-webentwicklerin-icon__link .wp-block-webentwicklerin-icon__inner { order: 1; }
+.wp-block-webentwicklerin-icon.icon-position-bottom .icon-text,
+.wp-block-webentwicklerin-icon.icon-position-bottom .wp-block-webentwicklerin-icon__link .icon-text { order: 0; }
+
+.wp-block-webentwicklerin-icon.icon-position-left .wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon.icon-position-left .wp-block-webentwicklerin-icon__link .wp-block-webentwicklerin-icon__inner { order: 0; }
+.wp-block-webentwicklerin-icon.icon-position-left .icon-text,
+.wp-block-webentwicklerin-icon.icon-position-left .wp-block-webentwicklerin-icon__link .icon-text { order: 1; }
+
+.wp-block-webentwicklerin-icon.icon-position-right .wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon.icon-position-right .wp-block-webentwicklerin-icon__link .wp-block-webentwicklerin-icon__inner { order: 1; }
+.wp-block-webentwicklerin-icon.icon-position-right .icon-text,
+.wp-block-webentwicklerin-icon.icon-position-right .wp-block-webentwicklerin-icon__link .icon-text { order: 0; }
+
+/* Honor WP text alignment toolbar on the block wrapper */
+.wp-block-webentwicklerin-icon.has-text-align-left {
+    justify-content: flex-start;
+}
+
+.wp-block-webentwicklerin-icon.has-text-align-center {
+    justify-content: center;
+}
+
+.wp-block-webentwicklerin-icon.has-text-align-right {
+    justify-content: flex-end;
+}
+
+/* Icon color and size come from CSS vars */
+.wp-block-webentwicklerin-icon svg {
+	width: var(--icon-width, 1em);
+	height: var(--icon-height, 1em);
+	transition: fill 0.3s ease;
+	flex-shrink: 0;
+}
+
+/* Icon wrapper for additional styling options */
+.wp-block-webentwicklerin-icon__wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	height: fit-content;
+	box-sizing: border-box;
+}
+
+.wp-block-webentwicklerin-icon svg path,
+.wp-block-webentwicklerin-icon svg polygon,
+.wp-block-webentwicklerin-icon svg circle,
+.wp-block-webentwicklerin-icon svg rect,
+.wp-block-webentwicklerin-icon svg line,
+.wp-block-webentwicklerin-icon svg ellipse,
+.wp-block-webentwicklerin-icon svg polyline,
+.wp-block-webentwicklerin-icon svg g {
+	fill: var(--icon-base-color, currentColor) !important;
+	transition: fill 0.3s ease;
+}
+
+/* Screen reader text */
+.wp-block-webentwicklerin-icon .screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	width: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	word-wrap: normal;
+}
+
+/* Icon text - inherits typography from parent block */
+.wp-block-webentwicklerin-icon .icon-text {
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	font-style: inherit;
+	line-height: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
+	text-decoration: inherit;
+}
+
+/* Hover state - only apply if hover background is explicitly set */
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon__link:hover .wp-block-webentwicklerin-icon__inner {
+	/* Only change background and border if hover colors are set, otherwise keep normal colors */
+	background-color: var(--hover-bg-color);
+	border-color: var(--hover-border-color, var(--we-icon-frame-color, transparent));
+}
+
+.wp-block-webentwicklerin-icon:hover svg path,
+.wp-block-webentwicklerin-icon:hover svg polygon,
+.wp-block-webentwicklerin-icon:hover svg circle,
+.wp-block-webentwicklerin-icon:hover svg rect,
+.wp-block-webentwicklerin-icon:hover svg line,
+.wp-block-webentwicklerin-icon:hover svg ellipse,
+.wp-block-webentwicklerin-icon:hover svg polyline,
+.wp-block-webentwicklerin-icon:hover svg g {
+	fill: var(--hover-icon-color, var(--icon-base-color, currentColor)) !important;
+}
+
+/* ========================================
+   ICON ANIMATIONS
+   ======================================== */
+
+/* Float Up Animation - Einfache Version */
+@keyframes float-up-simple {
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	25% {
+		opacity: 1;
+	}
+	47% {
+		transform: translateY(-120%);
+		opacity: 0;
+	}
+	48% {
+		transform: translateY(120%);
+		opacity: 0;
+	}
+	70% {
+		opacity: 0.3;
+	}
+	75% {
+		opacity: 0.6;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-float-up {
+	overflow: visible;
+	position: relative;
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-float-up .wp-block-webentwicklerin-icon__inner {
+	animation: float-up-simple 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+	position: relative;
+}
+
+/* Float Up Multiple - Mehrere überlappende Instanzen */
+.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple {
+	overflow: visible;
+	position: relative;
+}
+
+/* For multiple animation, we need to clone the icon via JavaScript or use a different approach */
+/* For now, create a trail effect with transform and opacity */
+@keyframes float-up-multiple {
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+		filter: blur(0px);
+	}
+	20% {
+		opacity: 1;
+	}
+	45% {
+		transform: translateY(-130%);
+		opacity: 0;
+		filter: blur(2px);
+	}
+	50% {
+		transform: translateY(130%);
+		opacity: 0;
+		filter: blur(0px);
+	}
+	65% {
+		opacity: 0.4;
+	}
+	75% {
+		opacity: 0.7;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+		filter: blur(0px);
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner {
+	animation: float-up-multiple 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+	position: relative;
+}
+
+/* Multiple effect with subtle shadow only - no dark rectangles */
+.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner {
+	filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15));
+}
+
+/* Pulse Animation - Icon pulsiert */
+@keyframes pulse {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-pulse .wp-block-webentwicklerin-icon__inner {
+	animation: pulse 2s ease-in-out infinite;
+}
+
+/* Bounce Animation - Icon hüpft */
+@keyframes bounce {
+	0%, 20%, 50%, 80%, 100% {
+		transform: translateY(0);
+	}
+	40% {
+		transform: translateY(-20px);
+	}
+	60% {
+		transform: translateY(-10px);
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-bounce .wp-block-webentwicklerin-icon__inner {
+	animation: bounce 2s ease-in-out infinite;
+}
+
+/* Rotate Animation - Icon dreht sich */
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-rotate .wp-block-webentwicklerin-icon__inner {
+	animation: rotate 3s linear infinite;
+}
+
+/* Shake Animation - Icon wackelt */
+@keyframes shake {
+	0%, 100% {
+		transform: translateX(0);
+	}
+	10%, 30%, 50%, 70%, 90% {
+		transform: translateX(-5px);
+	}
+	20%, 40%, 60%, 80% {
+		transform: translateX(5px);
+	}
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-shake .wp-block-webentwicklerin-icon__inner {
+	animation: shake 1s ease-in-out infinite;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-webentwicklerin-icon.icon-animation-float-up .wp-block-webentwicklerin-icon__inner,
+	.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner,
+	.wp-block-webentwicklerin-icon.icon-animation-pulse .wp-block-webentwicklerin-icon__inner,
+	.wp-block-webentwicklerin-icon.icon-animation-bounce .wp-block-webentwicklerin-icon__inner,
+	.wp-block-webentwicklerin-icon.icon-animation-rotate .wp-block-webentwicklerin-icon__inner,
+	.wp-block-webentwicklerin-icon.icon-animation-shake .wp-block-webentwicklerin-icon__inner {
+		animation: none !important;
+	}
+	
+}
+

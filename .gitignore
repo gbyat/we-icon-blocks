@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+node_modules/
+vendor/
+build/
+dist/
+*.log
+*.lock
+
+AGENT.md
+composer.json
+package-lock.json

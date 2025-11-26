@@ -1,0 +1,9 @@
+.wp-block-webentwicklerin-icon {
+	min-width: 24px;
+	min-height: 24px;
+}
+
+.editor-styles-wrapper .wp-block-webentwicklerin-icon {
+	display: inline-flex;
+}
+
