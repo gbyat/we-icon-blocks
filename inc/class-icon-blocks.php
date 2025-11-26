@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Webentwicklerin\WeIconBlocks;
 
 use function add_action;
+use function is_admin;
 use function is_dir;
 use function plugin_dir_path;
 use function plugin_dir_url;
@@ -49,6 +50,7 @@ final class WE_Icon_Blocks
     public function init(): void
     {
         add_action('init', [$this, 'register_blocks']);
+        add_action('plugins_loaded', [$this, 'init_github_updater'], 5);
         add_action('enqueue_block_editor_assets', [$this, 'enqueue_editor_assets']);
         add_action('enqueue_block_editor_assets', [$this, 'set_block_script_translations']);
     }
@@ -126,5 +128,19 @@ final class WE_Icon_Blocks
             '0.1.0',
             true
         );
+    }
+
+    /**
+     * Initialize GitHub updater for automatic updates.
+     */
+    public function init_github_updater(): void
+    {
+        if (! (is_admin() || wp_doing_cron())) {
+            return;
+        }
+
+        if (class_exists(Updater::class)) {
+            new Updater(WE_ICON_BLOCKS_PLUGIN_FILE);
+        }
     }
 }

@@ -1,0 +1,161 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger on version tags (e.g., v1.0.0)
+
+jobs:
+  validate:
+    name: Validate Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          tools: composer
+
+      - name: Install PHP dependencies
+        run: |
+          if [ -f composer.json ]; then
+            composer install --no-interaction --prefer-dist
+          fi
+
+      - name: Run PHP Linter (phpcs)
+        continue-on-error: true
+        run: |
+          # Check if phpcs is available
+          if command -v phpcs &> /dev/null || [ -f vendor/bin/phpcs ]; then
+            if [ -f vendor/bin/phpcs ]; then
+              vendor/bin/phpcs --standard=WordPress --extensions=php inc/
+            else
+              phpcs --standard=WordPress --extensions=php inc/
+            fi
+          else
+            echo "phpcs not found, skipping lint check"
+          fi
+
+      - name: Validate Plugin Header
+        run: |
+          php -r "
+          \$header = file_get_contents('we-icon-blocks.php');
+          if (!preg_match('/Version:\s*[\d.]+/', \$header)) {
+            echo 'ERROR: Version not found in plugin header\n';
+            exit(1);
+          }
+          echo '✓ Plugin header valid\n';
+          "
+
+      - name: Validate CHANGELOG
+        run: |
+          if [ ! -f CHANGELOG.md ]; then
+            echo "ERROR: CHANGELOG.md not found"
+            exit 1
+          fi
+
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+
+          if ! grep -q "## \[${VERSION}\]" CHANGELOG.md; then
+            echo "ERROR: Version ${VERSION} not found in CHANGELOG.md"
+            exit 1
+          fi
+
+          echo "✓ CHANGELOG.md contains version ${VERSION}"
+
+  build:
+    name: Build Release
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Version: ${VERSION}"
+
+      - name: Create plugin ZIP
+        run: |
+          PLUGIN_NAME="we-icon-blocks"
+          ZIP_NAME="${PLUGIN_NAME}.zip"
+
+          # Create a temporary directory for the plugin
+          mkdir -p ${PLUGIN_NAME}
+
+          # Copy main plugin file
+          cp we-icon-blocks.php ${PLUGIN_NAME}/
+          echo "✅ Copied we-icon-blocks.php"
+
+          # Copy inc directory (PHP classes and icons)
+          if [ -d "inc" ]; then
+            cp -r inc ${PLUGIN_NAME}/
+            echo "✅ Copied inc/ (PHP classes and icons)"
+          else
+            echo "ERROR: inc directory not found!"
+            exit 1
+          fi
+
+          # Copy blocks directory (built block assets)
+          if [ -d "blocks" ]; then
+            cp -r blocks ${PLUGIN_NAME}/
+            echo "✅ Copied blocks/ (built block assets)"
+          else
+            echo "⚠️  blocks directory not found (did you run npm run build?)"
+          fi
+
+          # Copy assets directory (JS helpers)
+          if [ -d "assets" ]; then
+            cp -r assets ${PLUGIN_NAME}/
+            echo "✅ Copied assets/ (JS helpers)"
+          fi
+
+          # Copy languages directory (translations)
+          if [ -d "languages" ]; then
+            cp -r languages ${PLUGIN_NAME}/
+            echo "✅ Copied languages/ (translations)"
+          fi
+
+          # Copy documentation files
+          for doc in README.md LICENSE CHANGELOG.md; do
+            if [ -f "$doc" ]; then
+              cp "$doc" ${PLUGIN_NAME}/
+              echo "✅ Copied $doc"
+            fi
+          done
+
+          # Create ZIP file - always named we-icon-blocks.zip
+          zip -r ${ZIP_NAME} ${PLUGIN_NAME}/
+
+          # Clean up temporary directory
+          rm -rf ${PLUGIN_NAME}
+
+          echo "✅ ZIP file created: ${ZIP_NAME}"
+          ls -lh ${ZIP_NAME}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: we-icon-blocks.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-zip
+          path: we-icon-blocks.zip
+          retention-days: 90
