@@ -53,24 +53,6 @@ The workflow `.github/workflows/release.yml`:
 
 ## Usage
 
-### Initial release
-
-For the **first** release, use:
-
-```bash
-npm run release:initial
-```
-
-This will:
-
-1. Use the current version from `package.json`.
-2. Sync the version to `we-icon-blocks.php` and `CHANGELOG.md`.
-3. Commit pending changes (if any).
-4. Create and push a git tag `vX.Y.Z`.
-5. Trigger the GitHub Actions release workflow.
-
-### Subsequent releases
-
 Recommended commands:
 
 ```bash

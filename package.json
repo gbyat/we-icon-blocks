@@ -11,7 +11,6 @@
     "make-pot": "node scripts/create-pot.js",
     "po-to-jed": "node scripts/po-to-jed.js",
     "hash-json": "node scripts/hash-json.js",
-    "release:initial": "node scripts/release-initial.js",
     "release:patch": "node scripts/release.js patch",
     "release:minor": "node scripts/release.js minor",
     "release:major": "node scripts/release.js major",
