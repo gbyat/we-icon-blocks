@@ -2,12 +2,16 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "webentwicklerin/icon",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "title": "Icon",
   "category": "media",
   "icon": "star-filled",
   "description": "Display SVG icons with customizable colors and styling",
-  "keywords": ["icon", "svg", "graphic"],
+  "keywords": [
+    "icon",
+    "svg",
+    "graphic"
+  ],
   "textdomain": "we-icon-blocks",
   "attributes": {
     "iconName": {
@@ -90,7 +94,11 @@
     }
   },
   "supports": {
-    "align": ["left", "center", "right"],
+    "align": [
+      "left",
+      "center",
+      "right"
+    ],
     "color": {
       "text": true,
       "background": true

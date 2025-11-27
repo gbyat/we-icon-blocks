@@ -33,6 +33,42 @@ if (pluginContent.includes('WE_ICON_BLOCKS_VERSION')) {
 fs.writeFileSync(pluginPath, pluginContent);
 console.log('✅ Updated we-icon-blocks.php');
 
+// Update block.json files
+const blocksDir = path.join(__dirname, '..', 'blocks');
+const updateBlockJsonVersions = (directory) => {
+    if (!fs.existsSync(directory)) {
+        return;
+    }
+
+    const entries = fs.readdirSync(directory, { withFileTypes: true });
+
+    entries.forEach((entry) => {
+        const entryPath = path.join(directory, entry.name);
+
+        if (entry.isDirectory()) {
+            updateBlockJsonVersions(entryPath);
+            return;
+        }
+
+        if (entry.isFile() && entry.name === 'block.json') {
+            try {
+                const blockData = JSON.parse(fs.readFileSync(entryPath, 'utf8'));
+                if (blockData.version !== version) {
+                    blockData.version = version;
+                    fs.writeFileSync(entryPath, `${JSON.stringify(blockData, null, 2)}\n`);
+                    console.log(`✅ Updated ${path.relative(path.join(__dirname, '..'), entryPath)}`);
+                } else {
+                    console.log(`ℹ️  ${path.relative(path.join(__dirname, '..'), entryPath)} already at ${version}`);
+                }
+            } catch (error) {
+                console.error(`⚠️  Could not update ${entryPath}: ${error.message}`);
+            }
+        }
+    });
+};
+
+updateBlockJsonVersions(blocksDir);
+
 // Update CHANGELOG.md
 const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
 if (!fs.existsSync(changelogPath)) {

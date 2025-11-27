@@ -40,7 +40,7 @@ registerBlockType('webentwicklerin/icon', {
         // Build inline styles
         const inlineStyles = {};
 
-        // Icon-Farbe isoliert setzen, Textfarbe unverändert
+        // Set icon colors without touching surrounding text color
         if (iconColor) {
             inlineStyles['--icon-base-color'] = iconColor;
         }
