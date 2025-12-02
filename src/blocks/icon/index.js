@@ -35,6 +35,8 @@ registerBlockType('webentwicklerin/icon', {
             hoverBorderColor,
             iconPadding,
             animation,
+            animationStrength,
+            animationRepeat,
         } = attributes;
 
         // Build inline styles
@@ -71,32 +73,56 @@ registerBlockType('webentwicklerin/icon', {
             inlineStyles['--icon-height'] = height;
         }
 
-        // Icon padding control
-        if (iconPadding !== undefined && iconPadding !== null) {
-            inlineStyles['--icon-padding'] = iconPadding;
-        }
+        // Icon padding & border are applied on the inner element, not on the wrapper.
+        // We keep the CSS custom properties but scope them directly to `__inner`.
 
-        // Icon Border Styles (scoped CSS vars; avoid "border-*" substrings so WP globals don't match)
-        if (iconBorderWidth) {
-            inlineStyles['--we-icon-frame-width'] = iconBorderWidth;
-        }
-        if (iconBorderStyle) {
-            inlineStyles['--we-icon-frame-style'] = iconBorderStyle;
-        }
-        if (iconBorderColor) {
-            inlineStyles['--we-icon-frame-color'] = iconBorderColor;
-        }
-        if (iconBorderRadius) {
-            inlineStyles['--we-icon-frame-radius'] = iconBorderRadius;
-        }
-        if (hoverBorderColor) {
-            inlineStyles['--hover-border-color'] = hoverBorderColor;
+        // Animation controls: duration & iteration via CSS variables
+        if (animation && animation !== 'none') {
+            const strengthToDuration = {
+                soft: '4s',
+                normal: '2s',
+                strong: '1s',
+            };
+            const duration = strengthToDuration[animationStrength] || strengthToDuration.normal;
+            inlineStyles['--we-icon-animation-duration'] = duration;
+            inlineStyles['--we-icon-animation-iterations'] = animationRepeat === 'once' ? '1' : 'infinite';
         }
 
         const blockProps = useBlockProps({
             style: inlineStyles,
             className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''}`
         });
+
+        const getInnerStyles = () => {
+            const styles = {
+                width,
+                height,
+            };
+
+            // Icon padding control (CSS var consumed in CSS for __inner)
+            if (iconPadding !== undefined && iconPadding !== null) {
+                styles['--icon-padding'] = iconPadding;
+            }
+
+            // Icon Border Styles (scoped CSS vars; avoid "border-*" substrings so WP globals don't match)
+            if (iconBorderWidth) {
+                styles['--we-icon-frame-width'] = iconBorderWidth;
+            }
+            if (iconBorderStyle) {
+                styles['--we-icon-frame-style'] = iconBorderStyle;
+            }
+            if (iconBorderColor) {
+                styles['--we-icon-frame-color'] = iconBorderColor;
+            }
+            if (iconBorderRadius) {
+                styles['--we-icon-frame-radius'] = iconBorderRadius;
+            }
+            if (hoverBorderColor) {
+                styles['--hover-border-color'] = hoverBorderColor;
+            }
+
+            return styles;
+        };
 
         const iconOptions = Object.keys(icons).map(key => ({
             label: key.charAt(0).toUpperCase() + key.slice(1).replace('-', ' '),
@@ -401,23 +427,25 @@ registerBlockType('webentwicklerin/icon', {
                         />
 
                         <RangeControl
-                            label={__('Border Radius', 'we-icon-blocks')}
-                            value={parseInt(iconBorderRadius) || 4}
-                            onChange={(value) => setAttributes({ iconBorderRadius: value + 'px' })}
+                            label={__('Border Radius (%)', 'we-icon-blocks')}
+                            value={parseInt(iconBorderRadius) || 0}
+                            onChange={(value) => setAttributes({ iconBorderRadius: value + '%' })}
                             min={0}
                             max={50}
                             step={1}
-                            help={__('For circular icons, use 50% manually in CSS', 'we-icon-blocks')}
+                            help={__('Border radius in percent (0–50%)', 'we-icon-blocks')}
                         />
+                    </PanelBody>
 
+                    <PanelBody title={__('Icon Padding', 'we-icon-blocks')} initialOpen={false}>
                         <RangeControl
-                            label={__('Icon Padding', 'we-icon-blocks')}
+                            label={__('Icon Padding (em)', 'we-icon-blocks')}
                             value={parseFloat(iconPadding) || 0.25}
                             onChange={(value) => setAttributes({ iconPadding: value === 0 ? '0' : value + 'em' })}
                             min={0}
-                            max={2}
+                            max={15}
                             step={0.1}
-                            help={__('Inner spacing around the icon', 'we-icon-blocks')}
+                            help={__('Inner spacing around the icon (0–15em)', 'we-icon-blocks')}
                         />
                     </PanelBody>
 
@@ -428,7 +456,6 @@ registerBlockType('webentwicklerin/icon', {
                             options={[
                                 { label: __('None', 'we-icon-blocks'), value: 'none' },
                                 { label: __('Float Up', 'we-icon-blocks'), value: 'float-up' },
-                                { label: __('Float Up Multiple', 'we-icon-blocks'), value: 'float-up-multiple' },
                                 { label: __('Pulse', 'we-icon-blocks'), value: 'pulse' },
                                 { label: __('Bounce', 'we-icon-blocks'), value: 'bounce' },
                                 { label: __('Rotate', 'we-icon-blocks'), value: 'rotate' },
@@ -437,6 +464,33 @@ registerBlockType('webentwicklerin/icon', {
                             onChange={(value) => setAttributes({ animation: value })}
                             help={__('Select an animation for the icon', 'we-icon-blocks')}
                         />
+
+                        {animation && animation !== 'none' && (
+                            <>
+                                <SelectControl
+                                    label={__('Animation Strength', 'we-icon-blocks')}
+                                    value={animationStrength || 'normal'}
+                                    options={[
+                                        { label: __('Soft', 'we-icon-blocks'), value: 'soft' },
+                                        { label: __('Normal', 'we-icon-blocks'), value: 'normal' },
+                                        { label: __('Strong', 'we-icon-blocks'), value: 'strong' },
+                                    ]}
+                                    onChange={(value) => setAttributes({ animationStrength: value })}
+                                    help={__('Controls the animation speed/intensity', 'we-icon-blocks')}
+                                />
+
+                                <SelectControl
+                                    label={__('Animation Repeat', 'we-icon-blocks')}
+                                    value={animationRepeat || 'loop'}
+                                    options={[
+                                        { label: __('Loop continuously', 'we-icon-blocks'), value: 'loop' },
+                                        { label: __('Play once', 'we-icon-blocks'), value: 'once' },
+                                    ]}
+                                    onChange={(value) => setAttributes({ animationRepeat: value })}
+                                    help={__('Choose whether the animation runs once or loops', 'we-icon-blocks')}
+                                />
+                            </>
+                        )}
                     </PanelBody>
 
                 </InspectorControls>
@@ -454,7 +508,7 @@ registerBlockType('webentwicklerin/icon', {
                             {iconPosition === 'top' && (
                                 <div
                                     className="wp-block-webentwicklerin-icon__inner"
-                                    style={{ width: width, height: height }}
+                                    style={getInnerStyles()}
                                     aria-hidden={hasText && text ? 'true' : undefined}
                                     dangerouslySetInnerHTML={{ __html: currentIcon }}
                                 />
@@ -465,7 +519,7 @@ registerBlockType('webentwicklerin/icon', {
                             {(iconPosition === 'left' || iconPosition === 'right' || iconPosition === 'bottom') && (
                                 <div
                                     className="wp-block-webentwicklerin-icon__inner"
-                                    style={{ width: width, height: height }}
+                                    style={getInnerStyles()}
                                     aria-hidden={hasText && text ? 'true' : undefined}
                                     dangerouslySetInnerHTML={{ __html: currentIcon }}
                                 />
@@ -482,7 +536,7 @@ registerBlockType('webentwicklerin/icon', {
                             {iconPosition === 'top' && (
                                 <div
                                     className="wp-block-webentwicklerin-icon__inner"
-                                    style={{ width: width, height: height }}
+                                    style={getInnerStyles()}
                                     aria-hidden={hasText && text ? 'true' : undefined}
                                     dangerouslySetInnerHTML={{ __html: currentIcon }}
                                 />
@@ -493,7 +547,7 @@ registerBlockType('webentwicklerin/icon', {
                             {(iconPosition === 'left' || iconPosition === 'right' || iconPosition === 'bottom') && (
                                 <div
                                     className="wp-block-webentwicklerin-icon__inner"
-                                    style={{ width: width, height: height }}
+                                    style={getInnerStyles()}
                                     aria-hidden={hasText && text ? 'true' : undefined}
                                     dangerouslySetInnerHTML={{ __html: currentIcon }}
                                 />
@@ -535,9 +589,11 @@ registerBlockType('webentwicklerin/icon', {
             hoverBorderColor,
             iconPadding,
             animation,
+            animationStrength,
+            animationRepeat,
         } = attributes;
 
-        // Build inline styles for save
+        // Build inline styles for save (wrapper-level only: colors, sizes, layout)
         const inlineStyles = {};
 
         if (iconColor) {
@@ -570,32 +626,53 @@ registerBlockType('webentwicklerin/icon', {
             inlineStyles['--icon-height'] = height;
         }
 
-        // Icon padding control
-        if (iconPadding) {
-            inlineStyles['--icon-padding'] = iconPadding;
-        }
-
-        // Icon Border Styles (scoped CSS vars; avoid "border-*" substrings so WP globals don't match)
-        if (iconBorderWidth) {
-            inlineStyles['--we-icon-frame-width'] = iconBorderWidth;
-        }
-        if (iconBorderStyle) {
-            inlineStyles['--we-icon-frame-style'] = iconBorderStyle;
-        }
-        if (iconBorderColor) {
-            inlineStyles['--we-icon-frame-color'] = iconBorderColor;
-        }
-        if (iconBorderRadius) {
-            inlineStyles['--we-icon-frame-radius'] = iconBorderRadius;
-        }
-        if (hoverBorderColor) {
-            inlineStyles['--hover-border-color'] = hoverBorderColor;
+        // Animation controls: duration & iteration via CSS variables
+        if (animation && animation !== 'none') {
+            const strengthToDuration = {
+                soft: '4s',
+                normal: '2s',
+                strong: '1s',
+            };
+            const duration = strengthToDuration[animationStrength] || strengthToDuration.normal;
+            inlineStyles['--we-icon-animation-duration'] = duration;
+            inlineStyles['--we-icon-animation-iterations'] = animationRepeat === 'once' ? '1' : 'infinite';
         }
 
         const blockProps = useBlockProps.save({
             style: inlineStyles,
             className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''}`
         });
+
+        const getInnerStyles = () => {
+            const styles = {
+                width,
+                height,
+            };
+
+            // Icon padding control (CSS var consumed in CSS for __inner)
+            if (iconPadding !== undefined && iconPadding !== null) {
+                styles['--icon-padding'] = iconPadding;
+            }
+
+            // Icon Border Styles (scoped CSS vars; avoid "border-*" substrings so WP globals don't match)
+            if (iconBorderWidth) {
+                styles['--we-icon-frame-width'] = iconBorderWidth;
+            }
+            if (iconBorderStyle) {
+                styles['--we-icon-frame-style'] = iconBorderStyle;
+            }
+            if (iconBorderColor) {
+                styles['--we-icon-frame-color'] = iconBorderColor;
+            }
+            if (iconBorderRadius) {
+                styles['--we-icon-frame-radius'] = iconBorderRadius;
+            }
+            if (hoverBorderColor) {
+                styles['--hover-border-color'] = hoverBorderColor;
+            }
+
+            return styles;
+        };
 
         const currentIcon = icons[iconName] || '';
 
@@ -615,7 +692,7 @@ registerBlockType('webentwicklerin/icon', {
                         )}
                         <div
                             className="wp-block-webentwicklerin-icon__inner"
-                            style={{ width: width, height: height }}
+                            style={getInnerStyles()}
                             aria-hidden={hasText && text ? 'true' : undefined}
                             dangerouslySetInnerHTML={{ __html: currentIcon }}
                         />
@@ -633,7 +710,7 @@ registerBlockType('webentwicklerin/icon', {
                         )}
                         <div
                             className="wp-block-webentwicklerin-icon__inner"
-                            style={{ width: width, height: height }}
+                            style={getInnerStyles()}
                             aria-hidden={hasText && text ? 'true' : undefined}
                             dangerouslySetInnerHTML={{ __html: currentIcon }}
                         />

@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "webentwicklerin/icon",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "title": "Icon",
   "category": "media",
   "icon": "star-filled",
@@ -91,6 +91,14 @@
     "animation": {
       "type": "string",
       "default": "none"
+    },
+    "animationStrength": {
+      "type": "string",
+      "default": "normal"
+    },
+    "animationRepeat": {
+      "type": "string",
+      "default": "loop"
     }
   },
   "supports": {

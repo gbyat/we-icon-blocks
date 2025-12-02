@@ -242,7 +242,10 @@
 }
 
 .wp-block-webentwicklerin-icon.icon-animation-float-up .wp-block-webentwicklerin-icon__inner {
-	animation: float-up-simple 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+	animation-name: float-up-simple;
+	animation-duration: var(--we-icon-animation-duration, 8s);
+	animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 	position: relative;
 }
 
@@ -307,7 +310,10 @@
 }
 
 .wp-block-webentwicklerin-icon.icon-animation-pulse .wp-block-webentwicklerin-icon__inner {
-	animation: pulse 2s ease-in-out infinite;
+	animation-name: pulse;
+	animation-duration: var(--we-icon-animation-duration, 2s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 }
 
 /* Bounce Animation - Icon hüpft */
@@ -324,7 +330,10 @@
 }
 
 .wp-block-webentwicklerin-icon.icon-animation-bounce .wp-block-webentwicklerin-icon__inner {
-	animation: bounce 2s ease-in-out infinite;
+	animation-name: bounce;
+	animation-duration: var(--we-icon-animation-duration, 2s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 }
 
 /* Rotate Animation - Icon dreht sich */
@@ -338,7 +347,10 @@
 }
 
 .wp-block-webentwicklerin-icon.icon-animation-rotate .wp-block-webentwicklerin-icon__inner {
-	animation: rotate 3s linear infinite;
+	animation-name: rotate;
+	animation-duration: var(--we-icon-animation-duration, 3s);
+	animation-timing-function: linear;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 }
 
 /* Shake Animation - Icon wackelt */
@@ -355,13 +367,15 @@
 }
 
 .wp-block-webentwicklerin-icon.icon-animation-shake .wp-block-webentwicklerin-icon__inner {
-	animation: shake 1s ease-in-out infinite;
+	animation-name: shake;
+	animation-duration: var(--we-icon-animation-duration, 1s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 }
 
 /* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
 	.wp-block-webentwicklerin-icon.icon-animation-float-up .wp-block-webentwicklerin-icon__inner,
-	.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner,
 	.wp-block-webentwicklerin-icon.icon-animation-pulse .wp-block-webentwicklerin-icon__inner,
 	.wp-block-webentwicklerin-icon.icon-animation-bounce .wp-block-webentwicklerin-icon__inner,
 	.wp-block-webentwicklerin-icon.icon-animation-rotate .wp-block-webentwicklerin-icon__inner,

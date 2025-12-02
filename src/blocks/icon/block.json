@@ -87,6 +87,14 @@
     "animation": {
       "type": "string",
       "default": "none"
+    },
+    "animationStrength": {
+      "type": "string",
+      "default": "normal"
+    },
+    "animationRepeat": {
+      "type": "string",
+      "default": "loop"
     }
   },
   "supports": {
