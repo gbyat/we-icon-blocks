@@ -95,6 +95,10 @@
     "animationRepeat": {
       "type": "string",
       "default": "loop"
+    },
+    "animationTrigger": {
+      "type": "string",
+      "default": "always"
     }
   },
   "supports": {

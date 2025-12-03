@@ -4,7 +4,7 @@
  * Plugin Name:       WE Icon Blocks
  * Plugin URI:        https://webentwicklerin.at
  * Description:       Provides a reusable icon library, blocks, and helper scripts.
- * Version:           0.2.0
+ * Version:           0.2.1
  * Author:            webentwicklerin, Gabriele Laesser
  * Author URI:        https://webentwicklerin.at
  * Text Domain:       we-icon-blocks
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('WE_ICON_BLOCKS_VERSION', '0.2.0');
+define('WE_ICON_BLOCKS_VERSION', '0.2.1');
 define('WE_ICON_BLOCKS_PLUGIN_FILE', __FILE__);
 define('WE_ICON_BLOCKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WE_ICON_BLOCKS_PLUGIN_URL', plugin_dir_url(__FILE__));

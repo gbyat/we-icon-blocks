@@ -37,6 +37,7 @@ registerBlockType('webentwicklerin/icon', {
             animation,
             animationStrength,
             animationRepeat,
+            animationTrigger,
         } = attributes;
 
         // Build inline styles
@@ -90,7 +91,7 @@ registerBlockType('webentwicklerin/icon', {
 
         const blockProps = useBlockProps({
             style: inlineStyles,
-            className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''}`
+            className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''} ${animation && animation !== 'none' ? `icon-animation-trigger-${animationTrigger || 'always'}` : ''}`
         });
 
         const getInnerStyles = () => {
@@ -468,15 +469,15 @@ registerBlockType('webentwicklerin/icon', {
                         {animation && animation !== 'none' && (
                             <>
                                 <SelectControl
-                                    label={__('Animation Strength', 'we-icon-blocks')}
+                                    label={__('Animation Duration', 'we-icon-blocks')}
                                     value={animationStrength || 'normal'}
                                     options={[
-                                        { label: __('Soft', 'we-icon-blocks'), value: 'soft' },
-                                        { label: __('Normal', 'we-icon-blocks'), value: 'normal' },
-                                        { label: __('Strong', 'we-icon-blocks'), value: 'strong' },
+                                        { label: __('Fast', 'we-icon-blocks'), value: 'soft' },
+                                        { label: __('Medium', 'we-icon-blocks'), value: 'normal' },
+                                        { label: __('Slow', 'we-icon-blocks'), value: 'strong' },
                                     ]}
                                     onChange={(value) => setAttributes({ animationStrength: value })}
-                                    help={__('Controls the animation speed/intensity', 'we-icon-blocks')}
+                                    help={__('Controls how fast the animation runs', 'we-icon-blocks')}
                                 />
 
                                 <SelectControl
@@ -488,6 +489,17 @@ registerBlockType('webentwicklerin/icon', {
                                     ]}
                                     onChange={(value) => setAttributes({ animationRepeat: value })}
                                     help={__('Choose whether the animation runs once or loops', 'we-icon-blocks')}
+                                />
+
+                                <SelectControl
+                                    label={__('Animation Trigger', 'we-icon-blocks')}
+                                    value={animationTrigger || 'always'}
+                                    options={[
+                                        { label: __('Always', 'we-icon-blocks'), value: 'always' },
+                                        { label: __('On hover', 'we-icon-blocks'), value: 'hover' },
+                                    ]}
+                                    onChange={(value) => setAttributes({ animationTrigger: value })}
+                                    help={__('Run the animation continuously or only on hover', 'we-icon-blocks')}
                                 />
                             </>
                         )}
@@ -591,6 +603,7 @@ registerBlockType('webentwicklerin/icon', {
             animation,
             animationStrength,
             animationRepeat,
+            animationTrigger,
         } = attributes;
 
         // Build inline styles for save (wrapper-level only: colors, sizes, layout)
@@ -640,7 +653,7 @@ registerBlockType('webentwicklerin/icon', {
 
         const blockProps = useBlockProps.save({
             style: inlineStyles,
-            className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''}`
+            className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''} ${animation && animation !== 'none' ? `icon-animation-trigger-${animationTrigger || 'always'}` : ''}`
         });
 
         const getInnerStyles = () => {

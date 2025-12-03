@@ -241,7 +241,7 @@
 	position: relative;
 }
 
-.wp-block-webentwicklerin-icon.icon-animation-float-up .wp-block-webentwicklerin-icon__inner {
+.wp-block-webentwicklerin-icon.icon-animation-float-up.icon-animation-trigger-always .wp-block-webentwicklerin-icon__inner {
 	animation-name: float-up-simple;
 	animation-duration: var(--we-icon-animation-duration, 8s);
 	animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
@@ -249,54 +249,17 @@
 	position: relative;
 }
 
-/* Float Up Multiple - Mehrere überlappende Instanzen */
-.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple {
-	overflow: visible;
+.wp-block-webentwicklerin-icon.icon-animation-float-up.icon-animation-trigger-hover .wp-block-webentwicklerin-icon__inner {
+	animation: none;
 	position: relative;
 }
 
-/* For multiple animation, we need to clone the icon via JavaScript or use a different approach */
-/* For now, create a trail effect with transform and opacity */
-@keyframes float-up-multiple {
-	0% {
-		transform: translateY(0);
-		opacity: 1;
-		filter: blur(0px);
-	}
-	20% {
-		opacity: 1;
-	}
-	45% {
-		transform: translateY(-130%);
-		opacity: 0;
-		filter: blur(2px);
-	}
-	50% {
-		transform: translateY(130%);
-		opacity: 0;
-		filter: blur(0px);
-	}
-	65% {
-		opacity: 0.4;
-	}
-	75% {
-		opacity: 0.7;
-	}
-	100% {
-		transform: translateY(0);
-		opacity: 1;
-		filter: blur(0px);
-	}
-}
-
-.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner {
-	animation: float-up-multiple 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+.wp-block-webentwicklerin-icon.icon-animation-float-up.icon-animation-trigger-hover:hover .wp-block-webentwicklerin-icon__inner {
+	animation-name: float-up-simple;
+	animation-duration: var(--we-icon-animation-duration, 8s);
+	animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
 	position: relative;
-}
-
-/* Multiple effect with subtle shadow only - no dark rectangles */
-.wp-block-webentwicklerin-icon.icon-animation-float-up-multiple .wp-block-webentwicklerin-icon__inner {
-	filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15));
 }
 
 /* Pulse Animation - Icon pulsiert */
@@ -309,7 +272,18 @@
 	}
 }
 
-.wp-block-webentwicklerin-icon.icon-animation-pulse .wp-block-webentwicklerin-icon__inner {
+.wp-block-webentwicklerin-icon.icon-animation-pulse.icon-animation-trigger-always .wp-block-webentwicklerin-icon__inner {
+	animation-name: pulse;
+	animation-duration: var(--we-icon-animation-duration, 2s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-pulse.icon-animation-trigger-hover .wp-block-webentwicklerin-icon__inner {
+	animation: none;
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-pulse.icon-animation-trigger-hover:hover .wp-block-webentwicklerin-icon__inner {
 	animation-name: pulse;
 	animation-duration: var(--we-icon-animation-duration, 2s);
 	animation-timing-function: ease-in-out;
@@ -329,7 +303,18 @@
 	}
 }
 
-.wp-block-webentwicklerin-icon.icon-animation-bounce .wp-block-webentwicklerin-icon__inner {
+.wp-block-webentwicklerin-icon.icon-animation-bounce.icon-animation-trigger-always .wp-block-webentwicklerin-icon__inner {
+	animation-name: bounce;
+	animation-duration: var(--we-icon-animation-duration, 2s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-bounce.icon-animation-trigger-hover .wp-block-webentwicklerin-icon__inner {
+	animation: none;
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-bounce.icon-animation-trigger-hover:hover .wp-block-webentwicklerin-icon__inner {
 	animation-name: bounce;
 	animation-duration: var(--we-icon-animation-duration, 2s);
 	animation-timing-function: ease-in-out;
@@ -346,7 +331,18 @@
 	}
 }
 
-.wp-block-webentwicklerin-icon.icon-animation-rotate .wp-block-webentwicklerin-icon__inner {
+.wp-block-webentwicklerin-icon.icon-animation-rotate.icon-animation-trigger-always .wp-block-webentwicklerin-icon__inner {
+	animation-name: rotate;
+	animation-duration: var(--we-icon-animation-duration, 3s);
+	animation-timing-function: linear;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-rotate.icon-animation-trigger-hover .wp-block-webentwicklerin-icon__inner {
+	animation: none;
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-rotate.icon-animation-trigger-hover:hover .wp-block-webentwicklerin-icon__inner {
 	animation-name: rotate;
 	animation-duration: var(--we-icon-animation-duration, 3s);
 	animation-timing-function: linear;
@@ -366,7 +362,18 @@
 	}
 }
 
-.wp-block-webentwicklerin-icon.icon-animation-shake .wp-block-webentwicklerin-icon__inner {
+.wp-block-webentwicklerin-icon.icon-animation-shake.icon-animation-trigger-always .wp-block-webentwicklerin-icon__inner {
+	animation-name: shake;
+	animation-duration: var(--we-icon-animation-duration, 1s);
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: var(--we-icon-animation-iterations, infinite);
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-shake.icon-animation-trigger-hover .wp-block-webentwicklerin-icon__inner {
+	animation: none;
+}
+
+.wp-block-webentwicklerin-icon.icon-animation-shake.icon-animation-trigger-hover:hover .wp-block-webentwicklerin-icon__inner {
 	animation-name: shake;
 	animation-duration: var(--we-icon-animation-duration, 1s);
 	animation-timing-function: ease-in-out;

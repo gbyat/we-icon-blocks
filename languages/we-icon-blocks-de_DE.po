@@ -3,10 +3,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WE Icon Blocks 0.1.0\n"
-"Report-Msgid-Bugs-To: https://github.com/gbyat/we-icon-blocks/issues\n"
-"POT-Creation-Date: 2025-11-26 11:58:46+0000\n"
-"PO-Revision-Date: 2025-11-26 13:02+0100\n"
-"Last-Translator: webentwicklerin, Gabriele Laesser <info@webentwicklerin.at>\n"
+"Report-Msgid-Bugs-To: https://github.com/gbyat/we-"
+"icon-blocks/issues\n"
+"POT-Creation-Date: 2025-12-03 07:57:52+0000\n"
+"PO-Revision-Date: 2025-12-03 08:59+0100\n"
+"Last-Translator: webentwicklerin, Gabriele Laesser "
+"<info@webentwicklerin.at>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -14,213 +16,280 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_x;_ex;_n;_nx;esc_attr__;esc_html__;esc_attr_e;esc_html_e;_n_noop;_nx_noop\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x;_ex;_n;_nx;esc_attr__;esc_html__;esc_attr_e;esc_html_e;_n_noop;_nx_noop\n"
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 3.8\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: inc\n"
 "X-Poedit-SearchPath-2: src\n"
 
-#: blocks/icon/index.js:300
+#: blocks/icon/index.js:327
 msgid "Above text"
 msgstr "Über dem Text"
 
-#: blocks/icon/index.js:425
+#: blocks/icon/index.js:518
+msgid "Always"
+msgstr "Immer"
+
+#: blocks/icon/index.js:455
 msgid "Animation"
 msgstr "Animation"
 
-#: blocks/icon/index.js:428
+#: blocks/icon/index.js:484
+msgid "Animation Duration"
+msgstr "Dauer der Animation"
+
+#: blocks/icon/index.js:501
+msgid "Animation Repeat"
+msgstr "Animations–Wiederholung"
+
+#: blocks/icon/index.js:515
+msgid "Animation Trigger"
+msgstr "Animation-Auslöser"
+
+#: blocks/icon/index.js:458
 msgid "Animation Type"
 msgstr "Animation Type"
 
-#: blocks/icon/index.js:347
+#: blocks/icon/index.js:374
 msgid "Background"
 msgstr "Hintergrund"
 
-#: blocks/icon/index.js:341
+#: blocks/icon/index.js:368
 msgid "Background Colors"
 msgstr "Hintergrund-Farben"
 
-#: blocks/icon/index.js:354
+#: blocks/icon/index.js:381
 msgid "Background on hover"
 msgstr "Hintergrund bei Mauszeiger"
 
-#: blocks/icon/index.js:303
+#: blocks/icon/index.js:330
 msgid "Below text"
 msgstr "Unter dem Text"
 
-#: blocks/icon/index.js:364
+#: blocks/icon/index.js:391
 msgid "Border color"
 msgstr "Border-Farbe"
 
-#: blocks/icon/index.js:371
+#: blocks/icon/index.js:398
 msgid "Border color on hover"
 msgstr "Border-Farbe bei Mauszeiger"
 
-#: blocks/icon/index.js:358
+#: blocks/icon/index.js:385
 msgid "Border Colors"
 msgstr "Border-Farben"
 
-#: blocks/icon/index.js:405
-msgid "Border Radius"
-msgstr "Border Radius"
+#: blocks/icon/index.js:432
+msgid "Border Radius (%)"
+msgstr "Randradius (%)"
 
-#: blocks/icon/index.js:386
+#: blocks/icon/index.js:440
+msgid "Border radius in percent (0–50%)"
+msgstr "Randradius in Prozent (0–50 %)"
+
+#: blocks/icon/index.js:413
 msgid "Border Style"
 msgstr "Border Style"
 
-#: blocks/icon/index.js:378
+#: blocks/icon/index.js:405
 msgid "Border Width"
 msgstr "Border Width"
 
-#: blocks/icon/index.js:443
+#: blocks/icon/index.js:470
 msgid "Bounce"
 msgstr "Bounce"
 
-#: blocks/icon/index.js:392
+#: blocks/icon/index.js:513
+msgid "Choose whether the animation runs once or loops"
+msgstr ""
+"Wählen Sie, ob die Animation einmalig oder in einer "
+"Schleife abgespielt werden soll."
+
+#: blocks/icon/index.js:499
+msgid "Controls how fast the animation runs"
+msgstr "Steuert, wie schnell die Animation läuft"
+
+#: blocks/icon/index.js:419
 msgid "Dashed"
 msgstr "Dashed"
 
-#: blocks/icon/index.js:395
+#: blocks/icon/index.js:422
 msgid "Dotted"
 msgstr "Dotted"
 
-#: blocks/icon/index.js:316
+#: blocks/icon/index.js:343
 msgid "e.g. 0.5em, 8px, 1rem"
 msgstr "z.B. 0.5em, 8px, 1rem"
 
-#: blocks/icon/index.js:434
+#: blocks/icon/index.js:487
+msgid "Fast"
+msgstr "Schnell"
+
+#: blocks/icon/index.js:464
 msgid "Float Up"
 msgstr "Float Up"
 
-#: blocks/icon/index.js:437
-msgid "Float Up Multiple"
-msgstr "Float Up Multiple"
-
-#: blocks/icon/index.js:413
-msgid "For circular icons, use 50% manually in CSS"
-msgstr "For circular icons, use 50% manually in CSS"
-
-#: blocks/icon/index.js:310
+#: blocks/icon/index.js:337
 msgid "Gap between icon and text"
 msgstr "Abstand zwischen Icon und Text"
 
-#: blocks/icon/index.js:241
+#: blocks/icon/index.js:268
 msgid "Height (px)"
 msgstr "Height (px)"
 
-#: blocks/icon/index.js:375
+#: blocks/icon/index.js:402
 msgid "Icon Border"
 msgstr "Icon Border"
 
-#: blocks/icon/index.js:330
+#: blocks/icon/index.js:357
 msgid "Icon color"
 msgstr "Icon-Farbe"
 
-#: blocks/icon/index.js:337
+#: blocks/icon/index.js:364
 msgid "Icon color on hover"
 msgstr "Icon-Farbe bei Mauszeiger"
 
-#: blocks/icon/index.js:324
+#: blocks/icon/index.js:351
 msgid "Icon Colors"
 msgstr "Icon-Farben"
 
-#: blocks/icon/index.js:415
+#: blocks/icon/index.js:442
 msgid "Icon Padding"
 msgstr "Icon Padding"
 
-#: blocks/icon/index.js:291
+#: blocks/icon/index.js:445
+msgid "Icon Padding (em)"
+msgstr "Icon Padding (em)"
+
+#: blocks/icon/index.js:318
 msgid "Icon position"
 msgstr "Icon-Position"
 
-#: blocks/icon/index.js:230
+#: blocks/icon/index.js:257
 msgid "Icon Settings"
 msgstr "Icon Settings"
 
-#: blocks/icon/index.js:423
-msgid "Inner spacing around the icon"
-msgstr "Innenabstand um das Icon"
+#: blocks/icon/index.js:453
+msgid "Inner spacing around the icon (0–15em)"
+msgstr "Innenabstand um das Icon (0-15em)"
 
-#: blocks/icon/index.js:294
+#: blocks/icon/index.js:321
 msgid "Left of text"
 msgstr "Links vom Text"
 
-#: blocks/icon/index.js:249
+#: blocks/icon/index.js:276
 msgid "Link & Text"
 msgstr "Link & Text"
 
-#: blocks/icon/index.js:258
+#: blocks/icon/index.js:285
 msgid "Link URL"
 msgstr "Link-URL"
 
-#: blocks/icon/index.js:271
+#: blocks/icon/index.js:504
+msgid "Loop continuously"
+msgstr "Kontinuierlich wiederholen"
+
+#: blocks/icon/index.js:490
+msgid "Medium"
+msgstr "Mittel"
+
+#: blocks/icon/index.js:298
 msgid "New window"
 msgstr "Neues Fenster"
 
-#: blocks/icon/index.js:398
+#: inc/class-updater.php:216
+msgid "No changelog available."
+msgstr "Kein Changelog verfügbar"
+
+#: blocks/icon/index.js:425
 msgid "None"
 msgstr "None"
 
-#: blocks/icon/index.js:265
+#: blocks/icon/index.js:521
+msgid "On hover"
+msgstr "Bei Hover"
+
+#: blocks/icon/index.js:292
 msgid "Open link in"
 msgstr "Link öffnen in"
 
-#: blocks/icon/index.js:440
+#: blocks/icon/index.js:507
+msgid "Play once"
+msgstr "Einmal abspielen"
+
+#: blocks/icon/index.js:467
 msgid "Pulse"
 msgstr "Pulse"
 
-#: blocks/icon/index.js:297
+#: blocks/icon/index.js:324
 msgid "Right of text"
 msgstr "Rechts vom Text"
 
-#: blocks/icon/index.js:446
+#: blocks/icon/index.js:473
 msgid "Rotate"
 msgstr "Rotate"
 
-#: blocks/icon/index.js:268
+#: blocks/icon/index.js:527
+msgid "Run the animation continuously or only on hover"
+msgstr ""
+"Die Animation kontinuierlich oder nur Mouseover "
+"ausführen"
+
+#: blocks/icon/index.js:295
 msgid "Same window"
 msgstr "Gleiches Fenster"
 
-#: blocks/icon/index.js:166
+#: blocks/icon/index.js:193
 msgid "Search icon..."
 msgstr "Icon suchen..."
 
-#: blocks/icon/index.js:455
+#: blocks/icon/index.js:482
 msgid "Select an animation for the icon"
 msgstr "Wählen Sie eine Animation für das Icon"
 
-#: blocks/icon/index.js:158
+#: blocks/icon/index.js:185
 msgid "Select icon"
 msgstr "Icon auswählen"
 
-#: blocks/icon/index.js:157
+#: blocks/icon/index.js:184
 msgid "Select icon..."
 msgstr "Icon auswählen..."
 
-#: blocks/icon/index.js:449
+#: blocks/icon/index.js:476
 msgid "Shake"
 msgstr "Shake"
 
-#: blocks/icon/index.js:279
+#: blocks/icon/index.js:306
 msgid "Show text"
 msgstr "Text anzeigen"
 
-#: blocks/icon/index.js:389
+#: blocks/icon/index.js:493
+msgid "Slow"
+msgstr "Langsam"
+
+#: blocks/icon/index.js:416
 msgid "Solid"
 msgstr "Solid"
 
-#: blocks/icon/index.js:285
+#: blocks/icon/index.js:312
 msgid "Text"
 msgstr "Text"
 
-#: blocks/icon/index.js:318
+#: blocks/icon/index.js:345
 msgid "Text for screen readers only"
 msgstr "Text nur für Screenreader"
 
-#: blocks/icon/index.js:252
+#: blocks/icon/index.js:279
 msgid "Use as link"
 msgstr "Als Link verwenden"
 
-#: blocks/icon/index.js:233
+#: blocks/icon/index.js:260
 msgid "Width (px)"
 msgstr "Width (px)"
+
+#~ msgid "Float Up Multiple"
+#~ msgstr "Float Up Multiple"
+
+#~ msgid "For circular icons, use 50% manually in CSS"
+#~ msgstr "For circular icons, use 50% manually in CSS"

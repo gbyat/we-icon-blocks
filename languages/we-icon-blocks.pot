@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WE Icon Blocks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/gbyat/we-icon-blocks/issues\n"
-"POT-Creation-Date: 2025-11-26 11:58:46+0000\n"
+"POT-Creation-Date: 2025-12-03 07:57:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,207 +20,263 @@ msgstr ""
 "X-Poedit-SearchPath-1: inc\n"
 "X-Poedit-SearchPath-2: src\n"
 
-#: blocks/icon/index.js:300
+#: blocks/icon/index.js:327
 msgid "Above text"
 msgstr ""
 
-#: blocks/icon/index.js:425
-msgid "Animation"
-msgstr ""
-
-#: blocks/icon/index.js:428
-msgid "Animation Type"
-msgstr ""
-
-#: blocks/icon/index.js:347
-msgid "Background"
-msgstr ""
-
-#: blocks/icon/index.js:341
-msgid "Background Colors"
-msgstr ""
-
-#: blocks/icon/index.js:354
-msgid "Background on hover"
-msgstr ""
-
-#: blocks/icon/index.js:303
-msgid "Below text"
-msgstr ""
-
-#: blocks/icon/index.js:364
-msgid "Border color"
-msgstr ""
-
-#: blocks/icon/index.js:371
-msgid "Border color on hover"
-msgstr ""
-
-#: blocks/icon/index.js:358
-msgid "Border Colors"
-msgstr ""
-
-#: blocks/icon/index.js:405
-msgid "Border Radius"
-msgstr ""
-
-#: blocks/icon/index.js:386
-msgid "Border Style"
-msgstr ""
-
-#: blocks/icon/index.js:378
-msgid "Border Width"
-msgstr ""
-
-#: blocks/icon/index.js:443
-msgid "Bounce"
-msgstr ""
-
-#: blocks/icon/index.js:392
-msgid "Dashed"
-msgstr ""
-
-#: blocks/icon/index.js:395
-msgid "Dotted"
-msgstr ""
-
-#: blocks/icon/index.js:316
-msgid "e.g. 0.5em, 8px, 1rem"
-msgstr ""
-
-#: blocks/icon/index.js:434
-msgid "Float Up"
-msgstr ""
-
-#: blocks/icon/index.js:437
-msgid "Float Up Multiple"
-msgstr ""
-
-#: blocks/icon/index.js:413
-msgid "For circular icons, use 50% manually in CSS"
-msgstr ""
-
-#: blocks/icon/index.js:310
-msgid "Gap between icon and text"
-msgstr ""
-
-#: blocks/icon/index.js:241
-msgid "Height (px)"
-msgstr ""
-
-#: blocks/icon/index.js:375
-msgid "Icon Border"
-msgstr ""
-
-#: blocks/icon/index.js:330
-msgid "Icon color"
-msgstr ""
-
-#: blocks/icon/index.js:337
-msgid "Icon color on hover"
-msgstr ""
-
-#: blocks/icon/index.js:324
-msgid "Icon Colors"
-msgstr ""
-
-#: blocks/icon/index.js:415
-msgid "Icon Padding"
-msgstr ""
-
-#: blocks/icon/index.js:291
-msgid "Icon position"
-msgstr ""
-
-#: blocks/icon/index.js:230
-msgid "Icon Settings"
-msgstr ""
-
-#: blocks/icon/index.js:423
-msgid "Inner spacing around the icon"
-msgstr ""
-
-#: blocks/icon/index.js:294
-msgid "Left of text"
-msgstr ""
-
-#: blocks/icon/index.js:249
-msgid "Link & Text"
-msgstr ""
-
-#: blocks/icon/index.js:258
-msgid "Link URL"
-msgstr ""
-
-#: blocks/icon/index.js:271
-msgid "New window"
-msgstr ""
-
-#: blocks/icon/index.js:398
-msgid "None"
-msgstr ""
-
-#: blocks/icon/index.js:265
-msgid "Open link in"
-msgstr ""
-
-#: blocks/icon/index.js:440
-msgid "Pulse"
-msgstr ""
-
-#: blocks/icon/index.js:297
-msgid "Right of text"
-msgstr ""
-
-#: blocks/icon/index.js:446
-msgid "Rotate"
-msgstr ""
-
-#: blocks/icon/index.js:268
-msgid "Same window"
-msgstr ""
-
-#: blocks/icon/index.js:166
-msgid "Search icon..."
+#: blocks/icon/index.js:518
+msgid "Always"
 msgstr ""
 
 #: blocks/icon/index.js:455
-msgid "Select an animation for the icon"
+msgid "Animation"
 msgstr ""
 
-#: blocks/icon/index.js:158
-msgid "Select icon"
+#: blocks/icon/index.js:484
+msgid "Animation Duration"
 msgstr ""
 
-#: blocks/icon/index.js:157
-msgid "Select icon..."
+#: blocks/icon/index.js:501
+msgid "Animation Repeat"
 msgstr ""
 
-#: blocks/icon/index.js:449
-msgid "Shake"
+#: blocks/icon/index.js:515
+msgid "Animation Trigger"
 msgstr ""
 
-#: blocks/icon/index.js:279
-msgid "Show text"
+#: blocks/icon/index.js:458
+msgid "Animation Type"
 msgstr ""
 
-#: blocks/icon/index.js:389
-msgid "Solid"
+#: blocks/icon/index.js:374
+msgid "Background"
 msgstr ""
 
-#: blocks/icon/index.js:285
-msgid "Text"
+#: blocks/icon/index.js:368
+msgid "Background Colors"
+msgstr ""
+
+#: blocks/icon/index.js:381
+msgid "Background on hover"
+msgstr ""
+
+#: blocks/icon/index.js:330
+msgid "Below text"
+msgstr ""
+
+#: blocks/icon/index.js:391
+msgid "Border color"
+msgstr ""
+
+#: blocks/icon/index.js:398
+msgid "Border color on hover"
+msgstr ""
+
+#: blocks/icon/index.js:385
+msgid "Border Colors"
+msgstr ""
+
+#: blocks/icon/index.js:432
+msgid "Border Radius (%)"
+msgstr ""
+
+#: blocks/icon/index.js:440
+msgid "Border radius in percent (0–50%)"
+msgstr ""
+
+#: blocks/icon/index.js:413
+msgid "Border Style"
+msgstr ""
+
+#: blocks/icon/index.js:405
+msgid "Border Width"
+msgstr ""
+
+#: blocks/icon/index.js:470
+msgid "Bounce"
+msgstr ""
+
+#: blocks/icon/index.js:513
+msgid "Choose whether the animation runs once or loops"
+msgstr ""
+
+#: blocks/icon/index.js:499
+msgid "Controls how fast the animation runs"
+msgstr ""
+
+#: blocks/icon/index.js:419
+msgid "Dashed"
+msgstr ""
+
+#: blocks/icon/index.js:422
+msgid "Dotted"
+msgstr ""
+
+#: blocks/icon/index.js:343
+msgid "e.g. 0.5em, 8px, 1rem"
+msgstr ""
+
+#: blocks/icon/index.js:487
+msgid "Fast"
+msgstr ""
+
+#: blocks/icon/index.js:464
+msgid "Float Up"
+msgstr ""
+
+#: blocks/icon/index.js:337
+msgid "Gap between icon and text"
+msgstr ""
+
+#: blocks/icon/index.js:268
+msgid "Height (px)"
+msgstr ""
+
+#: blocks/icon/index.js:402
+msgid "Icon Border"
+msgstr ""
+
+#: blocks/icon/index.js:357
+msgid "Icon color"
+msgstr ""
+
+#: blocks/icon/index.js:364
+msgid "Icon color on hover"
+msgstr ""
+
+#: blocks/icon/index.js:351
+msgid "Icon Colors"
+msgstr ""
+
+#: blocks/icon/index.js:442
+msgid "Icon Padding"
+msgstr ""
+
+#: blocks/icon/index.js:445
+msgid "Icon Padding (em)"
 msgstr ""
 
 #: blocks/icon/index.js:318
+msgid "Icon position"
+msgstr ""
+
+#: blocks/icon/index.js:257
+msgid "Icon Settings"
+msgstr ""
+
+#: blocks/icon/index.js:453
+msgid "Inner spacing around the icon (0–15em)"
+msgstr ""
+
+#: blocks/icon/index.js:321
+msgid "Left of text"
+msgstr ""
+
+#: blocks/icon/index.js:276
+msgid "Link & Text"
+msgstr ""
+
+#: blocks/icon/index.js:285
+msgid "Link URL"
+msgstr ""
+
+#: blocks/icon/index.js:504
+msgid "Loop continuously"
+msgstr ""
+
+#: blocks/icon/index.js:490
+msgid "Medium"
+msgstr ""
+
+#: blocks/icon/index.js:298
+msgid "New window"
+msgstr ""
+
+#: inc/class-updater.php:216
+msgid "No changelog available."
+msgstr ""
+
+#: blocks/icon/index.js:425
+msgid "None"
+msgstr ""
+
+#: blocks/icon/index.js:521
+msgid "On hover"
+msgstr ""
+
+#: blocks/icon/index.js:292
+msgid "Open link in"
+msgstr ""
+
+#: blocks/icon/index.js:507
+msgid "Play once"
+msgstr ""
+
+#: blocks/icon/index.js:467
+msgid "Pulse"
+msgstr ""
+
+#: blocks/icon/index.js:324
+msgid "Right of text"
+msgstr ""
+
+#: blocks/icon/index.js:473
+msgid "Rotate"
+msgstr ""
+
+#: blocks/icon/index.js:527
+msgid "Run the animation continuously or only on hover"
+msgstr ""
+
+#: blocks/icon/index.js:295
+msgid "Same window"
+msgstr ""
+
+#: blocks/icon/index.js:193
+msgid "Search icon..."
+msgstr ""
+
+#: blocks/icon/index.js:482
+msgid "Select an animation for the icon"
+msgstr ""
+
+#: blocks/icon/index.js:185
+msgid "Select icon"
+msgstr ""
+
+#: blocks/icon/index.js:184
+msgid "Select icon..."
+msgstr ""
+
+#: blocks/icon/index.js:476
+msgid "Shake"
+msgstr ""
+
+#: blocks/icon/index.js:306
+msgid "Show text"
+msgstr ""
+
+#: blocks/icon/index.js:493
+msgid "Slow"
+msgstr ""
+
+#: blocks/icon/index.js:416
+msgid "Solid"
+msgstr ""
+
+#: blocks/icon/index.js:312
+msgid "Text"
+msgstr ""
+
+#: blocks/icon/index.js:345
 msgid "Text for screen readers only"
 msgstr ""
 
-#: blocks/icon/index.js:252
+#: blocks/icon/index.js:279
 msgid "Use as link"
 msgstr ""
 
-#: blocks/icon/index.js:233
+#: blocks/icon/index.js:260
 msgid "Width (px)"
 msgstr ""
 
