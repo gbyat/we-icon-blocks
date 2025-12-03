@@ -33,6 +33,23 @@ if (pluginContent.includes('WE_ICON_BLOCKS_VERSION')) {
 fs.writeFileSync(pluginPath, pluginContent);
 console.log('✅ Updated we-icon-blocks.php');
 
+// Update Stable tag in README.md (WordPress readme header)
+const readmePath = path.join(__dirname, '..', 'README.md');
+if (fs.existsSync(readmePath)) {
+    let readmeContent = fs.readFileSync(readmePath, 'utf8');
+
+    if (/Stable tag:\s*/i.test(readmeContent)) {
+        readmeContent = readmeContent.replace(
+            /(Stable tag:\s*)[0-9]+\.[0-9]+\.[0-9]+/i,
+            `$1${version}`,
+        );
+        fs.writeFileSync(readmePath, readmeContent);
+        console.log('✅ Updated Stable tag in README.md');
+    } else {
+        console.log('ℹ️  No Stable tag found in README.md');
+    }
+}
+
 // Update block.json files
 const blocksDir = path.join(__dirname, '..', 'blocks');
 const updateBlockJsonVersions = (directory) => {
