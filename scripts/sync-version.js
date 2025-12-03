@@ -168,4 +168,3 @@ ${gitLog || '- Version update'}
 
 console.log(`✅ Version synchronized to ${version}`);
 
-
