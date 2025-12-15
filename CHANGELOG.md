@@ -1,3 +1,8 @@
+## [0.2.3] - 2025-12-15
+
+- Remove unnecessary blank line in sync-version.js script
+
+
 ## [0.2.2] - 2025-12-03
 
 - Update README.md with detailed plugin description, features, installation, usage, development, internationalization, and versioning information. Enhance sync-version script to automatically update the Stable tag in README.md.
@@ -43,3 +48,4 @@
 [0.2.0]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.0
 [0.2.1]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.1
 [0.2.2]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.2
+[0.2.3]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.3
