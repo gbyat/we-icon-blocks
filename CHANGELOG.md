@@ -1,3 +1,8 @@
+## [0.2.13] - 2026-01-03
+
+- Version update
+
+
 ## [0.2.12] - 2026-01-03
 
 - Refactor playground-blueprint.json to streamline the site options setup by consolidating the "setSiteOptions" step into a single entry, improving clarity and structure.
@@ -103,3 +108,4 @@
 [0.2.10]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.10
 [0.2.11]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.11
 [0.2.12]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.12
+[0.2.13]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.13
