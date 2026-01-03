@@ -38,16 +38,38 @@ const readmePath = path.join(__dirname, '..', 'README.md');
 if (fs.existsSync(readmePath)) {
     let readmeContent = fs.readFileSync(readmePath, 'utf8');
 
+    // Update Stable tag
     if (/Stable tag:\s*/i.test(readmeContent)) {
         readmeContent = readmeContent.replace(
-            /(Stable tag:\s*)[0-9]+\.[0-9]+\.[0-9]+/i,
+            /(\**Stable tag:\**\s*)[0-9]+\.[0-9]+\.[0-9]+/i,
             `$1${version}`,
         );
-        fs.writeFileSync(readmePath, readmeContent);
         console.log('✅ Updated Stable tag in README.md');
     } else {
         console.log('ℹ️  No Stable tag found in README.md');
     }
+
+    // Update Playground link
+    const playgroundLinkPattern = /(\[🚀 Test in WordPress Playground \(v)([0-9]+\.[0-9]+\.[0-9]+)(\]\(https:\/\/playground\.wordpress\.net\/\?plugin=https%3A%2F%2Fgithub\.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv)([0-9]+\.[0-9]+\.[0-9]+)(%2Fwe-icon-blocks\.zip\))/;
+    if (playgroundLinkPattern.test(readmeContent)) {
+        readmeContent = readmeContent.replace(
+            playgroundLinkPattern,
+            `$1${version}$3${version}$5`,
+        );
+        console.log('✅ Updated Playground link in README.md');
+    } else {
+        // Try to find and update just the version in the URL if the pattern doesn't match exactly
+        const urlPattern = /(https:\/\/playground\.wordpress\.net\/\?plugin=https%3A%2F%2Fgithub\.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv)([0-9]+\.[0-9]+\.[0-9]+)(%2Fwe-icon-blocks\.zip)/;
+        if (urlPattern.test(readmeContent)) {
+            readmeContent = readmeContent.replace(
+                urlPattern,
+                `$1${version}$3`,
+            );
+            console.log('✅ Updated Playground URL version in README.md');
+        }
+    }
+
+    fs.writeFileSync(readmePath, readmeContent);
 }
 
 // Update block.json files
