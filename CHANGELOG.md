@@ -1,3 +1,8 @@
+## [0.2.7] - 2026-01-03
+
+- Update playground-blueprint.json to change pluginName to pluginPath for better clarity.
+
+
 ## [0.2.6] - 2026-01-03
 
 - Update playground-blueprint.json to use the latest plugin version v0.2.5 and modify README.md to reflect the new testing link format. Enhance sync-version.js to automate updates for the plugin ZIP URL and Playground link.
@@ -67,3 +72,4 @@
 [0.2.4]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.4
 [0.2.5]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.5
 [0.2.6]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.6
+[0.2.7]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.7

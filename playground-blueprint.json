@@ -6,7 +6,7 @@
       "step": "installPlugin",
       "pluginZipFile": {
         "resource": "url",
-        "url": "https://github.com/gbyat/we-icon-blocks/releases/download/v0.2.6/we-icon-blocks.zip"
+        "url": "https://github.com/gbyat/we-icon-blocks/releases/download/v0.2.7/we-icon-blocks.zip"
       }
     },
     {
