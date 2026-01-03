@@ -1,3 +1,8 @@
+## [0.2.10] - 2026-01-03
+
+- Update playground-blueprint.json to change the landing page URL and replace the PHP code with a step to import demo content from a specified URL.
+
+
 ## [0.2.9] - 2026-01-03
 
 - Update playground-blueprint.json to change the landing page URL and modify the PHP code to update the default Hello World post with a new icon block.
@@ -85,3 +90,4 @@
 [0.2.7]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.7
 [0.2.8]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.8
 [0.2.9]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.9
+[0.2.10]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.10
