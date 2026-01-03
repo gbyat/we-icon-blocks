@@ -16,7 +16,8 @@
     "release:minor": "node scripts/release.js minor",
     "release:major": "node scripts/release.js major",
     "sync-version": "node scripts/sync-version.js",
-    "install-hook": "node scripts/install-git-hook.js"
+    "install-hook": "node scripts/install-git-hook.js",
+    "playground": "node scripts/generate-playground-url.js"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

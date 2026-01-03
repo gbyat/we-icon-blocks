@@ -92,3 +92,36 @@ npm run release:major
 ```
 
 GitHub Actions builds the release ZIP and attaches it to the corresponding GitHub Release, which is then used by the built‑in updater.
+
+### Testing with WordPress Playground
+
+You can test this plugin in [WordPress Playground](https://playground.wordpress.net/) without installing it locally or in a WordPress repository.
+
+**Quick preview (latest release):**
+
+```bash
+npm run playground
+```
+
+This generates a Playground URL that opens WordPress with the plugin pre-installed from the latest GitHub release.
+
+**Specific version:**
+
+```bash
+node scripts/generate-playground-url.js 0.2.3
+```
+
+**Using a Blueprint:**
+
+You can also use the `playground-blueprint.json` file directly:
+
+1. Host the blueprint file (e.g., via GitHub Gist or your own server).
+2. Open: `https://playground.wordpress.net/?blueprint-url=<your-blueprint-url>`
+
+The blueprint automatically:
+
+- Installs the plugin from the GitHub release
+- Activates it
+- Navigates to the plugins page
+
+**Note:** The plugin must be released on GitHub (via `npm run release:*`) for the Playground URLs to work, as they reference the release ZIP files.

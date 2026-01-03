@@ -1,0 +1,21 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/plugins.php",
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginZipFile": {
+        "resource": "url",
+        "url": "https://github.com/gbyat/we-icon-blocks/releases/download/v0.2.3/we-icon-blocks.zip"
+      }
+    },
+    {
+      "step": "activatePlugin",
+      "pluginName": "we-icon-blocks/we-icon-blocks.php"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\n// Navigate to plugins page after activation\nwp_redirect(admin_url('plugins.php?plugin_status=active'));\nexit;"
+    }
+  ]
+}
