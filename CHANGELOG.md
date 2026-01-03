@@ -1,3 +1,8 @@
+## [0.2.8] - 2026-01-03
+
+- Update playground-blueprint.json to use the latest plugin download URL and clarify plugin activation details in the installation steps.
+
+
 ## [0.2.7] - 2026-01-03
 
 - Update playground-blueprint.json to change pluginName to pluginPath for better clarity.
@@ -73,3 +78,4 @@
 [0.2.5]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.5
 [0.2.6]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.6
 [0.2.7]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.7
+[0.2.8]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.8
