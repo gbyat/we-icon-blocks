@@ -49,27 +49,55 @@ if (fs.existsSync(readmePath)) {
         console.log('ℹ️  No Stable tag found in README.md');
     }
 
-    // Update Playground link
-    const playgroundLinkPattern = /(\[🚀 Test in WordPress Playground \(v)([0-9]+\.[0-9]+\.[0-9]+)(\]\(https:\/\/playground\.wordpress\.net\/\?plugin=https%3A%2F%2Fgithub\.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv)([0-9]+\.[0-9]+\.[0-9]+)(%2Fwe-icon-blocks\.zip\))/;
+    // Update Playground link (using blueprint-url approach like wordpress.org plugins)
+    const blueprintUrl = `https://raw.githubusercontent.com/gbyat/we-icon-blocks/main/playground-blueprint.json`;
+    const playgroundUrl = `https://playground.wordpress.net/?blueprint-url=${encodeURIComponent(blueprintUrl)}`;
+
+    const playgroundLinkPattern = /(\[🚀 Test in WordPress Playground \(v)([0-9]+\.[0-9]+\.[0-9]+)(\]\()([^)]+)(\))/;
     if (playgroundLinkPattern.test(readmeContent)) {
         readmeContent = readmeContent.replace(
             playgroundLinkPattern,
-            `$1${version}$3${version}$5`,
+            `$1${version}$3${playgroundUrl}$5`,
         );
         console.log('✅ Updated Playground link in README.md');
     } else {
-        // Try to find and update just the version in the URL if the pattern doesn't match exactly
-        const urlPattern = /(https:\/\/playground\.wordpress\.net\/\?plugin=https%3A%2F%2Fgithub\.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv)([0-9]+\.[0-9]+\.[0-9]+)(%2Fwe-icon-blocks\.zip)/;
-        if (urlPattern.test(readmeContent)) {
+        // Try to find and update just the version in the link text if the pattern doesn't match exactly
+        const versionInLinkPattern = /(\[🚀 Test in WordPress Playground \(v)([0-9]+\.[0-9]+\.[0-9]+)(\])/;
+        if (versionInLinkPattern.test(readmeContent)) {
             readmeContent = readmeContent.replace(
-                urlPattern,
+                versionInLinkPattern,
                 `$1${version}$3`,
             );
-            console.log('✅ Updated Playground URL version in README.md');
+            console.log('✅ Updated Playground link version in README.md');
         }
     }
 
     fs.writeFileSync(readmePath, readmeContent);
+}
+
+// Update playground-blueprint.json with current version
+const blueprintPath = path.join(__dirname, '..', 'playground-blueprint.json');
+if (fs.existsSync(blueprintPath)) {
+    try {
+        const blueprintContent = JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
+
+        // Update the plugin ZIP URL in the blueprint
+        if (blueprintContent.steps && Array.isArray(blueprintContent.steps)) {
+            blueprintContent.steps.forEach((step) => {
+                if (step.step === 'installPlugin' && step.pluginZipFile && step.pluginZipFile.url) {
+                    step.pluginZipFile.url = step.pluginZipFile.url.replace(
+                        /\/releases\/download\/v[0-9]+\.[0-9]+\.[0-9]+\//,
+                        `/releases/download/v${version}/`,
+                    );
+                }
+            });
+
+            fs.writeFileSync(blueprintPath, JSON.stringify(blueprintContent, null, 2) + '\n');
+            console.log('✅ Updated playground-blueprint.json');
+        }
+    } catch (error) {
+        console.error(`⚠️  Could not update playground-blueprint.json: ${error.message}`);
+    }
 }
 
 // Update block.json files
