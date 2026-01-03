@@ -1,3 +1,8 @@
+## [0.2.6] - 2026-01-03
+
+- Update playground-blueprint.json to use the latest plugin version v0.2.5 and modify README.md to reflect the new testing link format. Enhance sync-version.js to automate updates for the plugin ZIP URL and Playground link.
+
+
 ## [0.2.5] - 2026-01-03
 
 - Update README.md to include a direct link for testing the latest release in WordPress Playground and enhance sync-version.js to automatically update the Playground link and Stable tag version.
@@ -61,3 +66,4 @@
 [0.2.3]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.3
 [0.2.4]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.4
 [0.2.5]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.5
+[0.2.6]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.6
