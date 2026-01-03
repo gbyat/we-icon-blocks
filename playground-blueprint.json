@@ -6,12 +6,13 @@
       "step": "installPlugin",
       "pluginZipFile": {
         "resource": "url",
-        "url": "https://github.com/gbyat/we-icon-blocks/releases/download/v0.2.7/we-icon-blocks.zip"
+        "url": "https://github.com/gbyat/we-icon-blocks/releases/latest/download/we-icon-blocks.zip"
       }
     },
     {
       "step": "activatePlugin",
-      "pluginPath": "we-icon-blocks"
+      "pluginName": "WE Icon Blocks",
+      "pluginPath": "we-icon-blocks/we-icon-blocks.php"
     },
     {
       "step": "runPHP",

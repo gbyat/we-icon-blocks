@@ -75,30 +75,8 @@ if (fs.existsSync(readmePath)) {
     fs.writeFileSync(readmePath, readmeContent);
 }
 
-// Update playground-blueprint.json with current version
-const blueprintPath = path.join(__dirname, '..', 'playground-blueprint.json');
-if (fs.existsSync(blueprintPath)) {
-    try {
-        const blueprintContent = JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
-
-        // Update the plugin ZIP URL in the blueprint
-        if (blueprintContent.steps && Array.isArray(blueprintContent.steps)) {
-            blueprintContent.steps.forEach((step) => {
-                if (step.step === 'installPlugin' && step.pluginZipFile && step.pluginZipFile.url) {
-                    step.pluginZipFile.url = step.pluginZipFile.url.replace(
-                        /\/releases\/download\/v[0-9]+\.[0-9]+\.[0-9]+\//,
-                        `/releases/download/v${version}/`,
-                    );
-                }
-            });
-
-            fs.writeFileSync(blueprintPath, JSON.stringify(blueprintContent, null, 2) + '\n');
-            console.log('✅ Updated playground-blueprint.json');
-        }
-    } catch (error) {
-        console.error(`⚠️  Could not update playground-blueprint.json: ${error.message}`);
-    }
-}
+// Note: playground-blueprint.json uses /releases/latest/download/ which automatically
+// points to the latest release, so no version update needed here.
 
 // Update block.json files
 const blocksDir = path.join(__dirname, '..', 'blocks');
