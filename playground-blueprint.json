@@ -11,7 +11,7 @@
     },
     {
       "step": "activatePlugin",
-      "pluginName": "we-icon-blocks/we-icon-blocks.php"
+      "pluginPath": "we-icon-blocks"
     },
     {
       "step": "runPHP",
