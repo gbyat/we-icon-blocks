@@ -16,16 +16,16 @@
       "pluginPath": "we-icon-blocks/we-icon-blocks.php"
     },
     {
+      "step": "setSiteOptions",
+      "options": {
+        "blogname": "WE Icon Blocks Demo"
+      }
+    },
+    {
       "step": "importWxr",
       "file": {
         "resource": "url",
         "url": "https://raw.githubusercontent.com/gbyat/we-icon-blocks/main/playground-demo-content.xml"
-      }
-    },
-    {
-      "step": "setSiteOptions",
-      "options": {
-        "blogname": "WE Icon Blocks Demo"
       }
     }
   ]
