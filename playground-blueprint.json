@@ -1,6 +1,7 @@
 {
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-  "landingPage": "/wp-admin/post.php?post=2&action=edit",
+  "landingPage": "/wp-admin/post.php?post=4&action=edit",
+  "login": true,
   "steps": [
     {
       "step": "installPlugin",
@@ -19,6 +20,12 @@
       "file": {
         "resource": "url",
         "url": "https://raw.githubusercontent.com/gbyat/we-icon-blocks/main/playground-demo-content.xml"
+      }
+    },
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "blogname": "WE Icon Blocks Demo"
       }
     }
   ]
