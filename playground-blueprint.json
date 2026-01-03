@@ -1,6 +1,6 @@
 {
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-  "landingPage": "/wp-admin/plugins.php",
+  "landingPage": "/wp-admin/post.php?post=1&action=edit",
   "steps": [
     {
       "step": "installPlugin",
@@ -16,7 +16,7 @@
     },
     {
       "step": "runPHP",
-      "code": "<?php\n// Navigate to plugins page after activation\nwp_redirect(admin_url('plugins.php?plugin_status=active'));\nexit;"
+      "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n\n// Update the default Hello World post (ID 1) with the icon block\nwp_update_post([\n    'ID' => 1,\n    'post_title' => 'WE Icon Blocks Demo',\n    'post_content' => '<!-- wp:webentwicklerin/icon /-->',\n    'post_status' => 'publish'\n]);"
     }
   ]
 }
