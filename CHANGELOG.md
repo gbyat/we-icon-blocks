@@ -1,3 +1,8 @@
+## [0.2.4] - 2026-01-03
+
+- Add playground script to package.json and update README.md with testing instructions for WordPress Playground
+
+
 ## [0.2.3] - 2025-12-15
 
 - Remove unnecessary blank line in sync-version.js script
@@ -49,3 +54,4 @@
 [0.2.1]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.1
 [0.2.2]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.2
 [0.2.3]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.3
+[0.2.4]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.4
