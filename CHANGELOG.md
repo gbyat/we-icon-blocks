@@ -1,3 +1,8 @@
+## [0.2.5] - 2026-01-03
+
+- Update README.md to include a direct link for testing the latest release in WordPress Playground and enhance sync-version.js to automatically update the Playground link and Stable tag version.
+
+
 ## [0.2.4] - 2026-01-03
 
 - Add playground script to package.json and update README.md with testing instructions for WordPress Playground
@@ -55,3 +60,4 @@
 [0.2.2]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.2
 [0.2.3]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.3
 [0.2.4]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.4
+[0.2.5]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.5

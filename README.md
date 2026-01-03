@@ -5,7 +5,7 @@
 **Requires at least:** 5.8  
 **Tested up to:** 6.9  
 **Requires PHP:** 7.4  
-**Stable tag:** 0.2.1  
+**Stable tag:** 0.2.5  
 **License:** GPL-2.0-or-later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,7 @@ GitHub Actions builds the release ZIP and attaches it to the corresponding GitHu
 
 You can test this plugin in [WordPress Playground](https://playground.wordpress.net/) without installing it locally or in a WordPress repository.
 
-**[🚀 Test in WordPress Playground (v0.2.4)](https://playground.wordpress.net/?plugin=https%3A%2F%2Fgithub.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv0.2.4%2Fwe-icon-blocks.zip)** — Opens WordPress Playground with the latest release pre-installed.
+**[🚀 Test in WordPress Playground (v0.2.4)](https://playground.wordpress.net/?plugin=https%3A%2F%2Fgithub.com%2Fgbyat%2Fwe-icon-blocks%2Freleases%2Fdownload%2Fv0.2.5%2Fwe-icon-blocks.zip)** — Opens WordPress Playground with the latest release pre-installed.
 
 **Quick preview (latest release):**
 
