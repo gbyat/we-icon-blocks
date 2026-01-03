@@ -1,3 +1,8 @@
+## [0.2.11] - 2026-01-03
+
+- Update playground-blueprint.json to set the landing page to post 4 and enable login, and add a new step to set the site options with the blog name "WE Icon Blocks Demo". Update playground-demo-content.xml to reflect the change in post ID and GUID to post 4.
+
+
 ## [0.2.10] - 2026-01-03
 
 - Update playground-blueprint.json to change the landing page URL and replace the PHP code with a step to import demo content from a specified URL.
@@ -91,3 +96,4 @@
 [0.2.8]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.8
 [0.2.9]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.9
 [0.2.10]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.10
+[0.2.11]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.11
