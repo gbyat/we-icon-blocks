@@ -75,8 +75,37 @@ if (fs.existsSync(readmePath)) {
     fs.writeFileSync(readmePath, readmeContent);
 }
 
-// Note: playground-blueprint.json uses /releases/latest/download/ which automatically
-// points to the latest release, so no version update needed here.
+// Update playground-blueprint.json with current version
+const blueprintPath = path.join(__dirname, '..', 'playground-blueprint.json');
+if (fs.existsSync(blueprintPath)) {
+    try {
+        let blueprintContent = fs.readFileSync(blueprintPath, 'utf8');
+
+        // Update the plugin ZIP URL in the blueprint to use specific version instead of /latest/
+        const versionUrlPattern = /(https:\/\/github\.com\/gbyat\/we-icon-blocks\/releases\/download\/v)([0-9]+\.[0-9]+\.[0-9]+)(\/we-icon-blocks\.zip)/;
+        if (versionUrlPattern.test(blueprintContent)) {
+            blueprintContent = blueprintContent.replace(
+                versionUrlPattern,
+                `$1${version}$3`,
+            );
+            fs.writeFileSync(blueprintPath, blueprintContent);
+            console.log('✅ Updated playground-blueprint.json version');
+        } else {
+            // Try to update /latest/ to specific version
+            const latestUrlPattern = /(https:\/\/github\.com\/gbyat\/we-icon-blocks\/releases\/latest\/download\/we-icon-blocks\.zip)/;
+            if (latestUrlPattern.test(blueprintContent)) {
+                blueprintContent = blueprintContent.replace(
+                    latestUrlPattern,
+                    `https://github.com/gbyat/we-icon-blocks/releases/download/v${version}/we-icon-blocks.zip`,
+                );
+                fs.writeFileSync(blueprintPath, blueprintContent);
+                console.log('✅ Updated playground-blueprint.json from /latest/ to specific version');
+            }
+        }
+    } catch (error) {
+        console.error(`⚠️  Could not update playground-blueprint.json: ${error.message}`);
+    }
+}
 
 // Update block.json files
 const blocksDir = path.join(__dirname, '..', 'blocks');

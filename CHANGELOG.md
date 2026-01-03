@@ -1,3 +1,8 @@
+## [0.2.14] - 2026-01-03
+
+- Version update
+
+
 ## [0.2.13] - 2026-01-03
 
 - Version update
@@ -109,3 +114,4 @@
 [0.2.11]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.11
 [0.2.12]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.12
 [0.2.13]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.13
+[0.2.14]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.14
