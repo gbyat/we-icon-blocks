@@ -302,12 +302,18 @@ if (
 
                             {linkUrl && (
                                 <>
-                                    <TextControl
-                                        label={__('Link URL', 'we-icon-blocks')}
-                                        value={linkUrl}
-                                        onChange={(value) => setAttributes({ linkUrl: value })}
-                                        placeholder="https://..."
-                                    />
+                                    <div style={{ marginBottom: '16px', width: '100%' }}>
+                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                                            {__('Link URL', 'we-icon-blocks')}
+                                        </label>
+                                        <div style={{ width: '100%', minWidth: 0 }}>
+                                            <URLInput
+                                                value={linkUrl}
+                                                onChange={(value) => setAttributes({ linkUrl: value })}
+                                                placeholder={__('Enter URL or search for content', 'we-icon-blocks')}
+                                            />
+                                        </div>
+                                    </div>
 
                                     <SelectControl
                                         label={__('Open link in', 'we-icon-blocks')}

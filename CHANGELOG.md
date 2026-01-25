@@ -1,3 +1,8 @@
+## [0.2.18] - 2026-01-25
+
+- Version update
+
+
 ## [0.2.17] - 2026-01-03
 
 - Refactor playground-demo-content.xml to correct the placement of the closing comment tag for the icon block, ensuring proper rendering of the SVG icon.
@@ -133,3 +138,4 @@
 [0.2.15]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.15
 [0.2.16]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.16
 [0.2.17]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.17
+[0.2.18]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.18
