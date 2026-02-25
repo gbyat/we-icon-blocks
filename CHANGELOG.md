@@ -1,3 +1,10 @@
+## [0.2.19] - 2026-02-25
+
+- Update README.md to clarify icon block features, including layout options, animation settings, and accessibility improvements. Adjust usage instructions for better clarity on icon positioning and background frame options.
+- Enhance icon block with new attributes for frame customization, including frame icon name, padding, hover color, and advanced SVG options. Update styles for improved frame rendering and responsiveness, ensuring proper layering and hover effects.
+- Update icon block to version 0.1.0, adding new frame attributes for customizable background frames, including frame mode, image URL, fit, color, and SVG raw data. Refactor styles to support frame rendering and ensure proper layering of icon content.
+
+
 ## [0.2.18] - 2026-01-25
 
 - Version update
@@ -139,3 +146,4 @@
 [0.2.16]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.16
 [0.2.17]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.17
 [0.2.18]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.18
+[0.2.19]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.19
