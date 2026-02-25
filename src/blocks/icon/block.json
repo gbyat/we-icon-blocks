@@ -99,6 +99,23 @@
     "animationTrigger": {
       "type": "string",
       "default": "always"
+    },
+    "frameMode": {
+      "type": "string",
+      "default": "none"
+    },
+    "frameImageUrl": {
+      "type": "string"
+    },
+    "frameFit": {
+      "type": "string",
+      "default": "contain"
+    },
+    "frameColor": {
+      "type": "string"
+    },
+    "frameSvgRaw": {
+      "type": "string"
     }
   },
   "supports": {

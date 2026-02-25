@@ -5,21 +5,23 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
   // eslint-disable-next-line no-console
   console.warn('we-icon-blocks: wp global not available, skipping block registration in this context.');
 } else {
-  const {
-    createElement,
-    Fragment,
-    useState
-  } = wp.element;
-  const {
-    registerBlockType
-  } = wp.blocks;
-  const {
-    InspectorControls,
-    useBlockProps,
-    PanelColorSettings,
-    RichText,
-    URLInput
-  } = wp.blockEditor;
+    const {
+      createElement,
+      Fragment,
+      useState
+    } = wp.element;
+    const {
+      registerBlockType
+    } = wp.blocks;
+    const {
+      InspectorControls,
+      useBlockProps,
+      PanelColorSettings,
+      RichText,
+      URLInput,
+      MediaUpload,
+      MediaUploadCheck
+    } = wp.blockEditor;
   const {
     PanelBody,
     SelectControl,
@@ -65,7 +67,12 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         animation,
         animationStrength,
         animationRepeat,
-        animationTrigger
+        animationTrigger,
+        frameMode,
+        frameImageUrl,
+        frameFit,
+        frameColor,
+        frameSvgRaw
       } = attributes;
 
       // Build inline styles
@@ -100,6 +107,14 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }
       if (height) {
         inlineStyles['--icon-height'] = height;
+      }
+
+      // Optional background frame styling (color & fit)
+      if (frameColor) {
+        inlineStyles['--we-icon-frame-layer-color'] = frameColor;
+      }
+      if (frameFit) {
+        inlineStyles['--we-icon-frame-fit'] = frameFit;
       }
 
       // Icon padding & border are applied on the inner element, not on the wrapper.
@@ -746,6 +761,237 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
       }, text)));
-    }
+    },
+    deprecated: [{
+      attributes: {
+        iconName: {
+          type: 'string',
+          default: 'arrow-up'
+        },
+        iconColor: {
+          type: 'string'
+        },
+        backgroundColor: {
+          type: 'string'
+        },
+        hoverIconColor: {
+          type: 'string'
+        },
+        hoverBackgroundColor: {
+          type: 'string'
+        },
+        width: {
+          type: 'string',
+          default: '24px'
+        },
+        height: {
+          type: 'string',
+          default: '24px'
+        },
+        linkUrl: {
+          type: 'string'
+        },
+        linkTarget: {
+          type: 'string',
+          default: '_self'
+        },
+        linkRel: {
+          type: 'string'
+        },
+        hasText: {
+          type: 'boolean',
+          default: false
+        },
+        text: {
+          type: 'string'
+        },
+        iconPosition: {
+          type: 'string',
+          default: 'left'
+        },
+        screenReaderOnly: {
+          type: 'boolean',
+          default: false
+        },
+        gap: {
+          type: 'string',
+          default: '0.5em'
+        },
+        iconBorderWidth: {
+          type: 'string'
+        },
+        iconBorderStyle: {
+          type: 'string',
+          default: 'solid'
+        },
+        iconBorderColor: {
+          type: 'string'
+        },
+        iconBorderRadius: {
+          type: 'string',
+          default: '4px'
+        },
+        hoverBorderColor: {
+          type: 'string'
+        },
+        iconPadding: {
+          type: 'string',
+          default: '0'
+        },
+        animation: {
+          type: 'string',
+          default: 'none'
+        },
+        animationStrength: {
+          type: 'string',
+          default: 'normal'
+        },
+        animationRepeat: {
+          type: 'string',
+          default: 'loop'
+        },
+        animationTrigger: {
+          type: 'string',
+          default: 'always'
+        }
+      },
+      save: ({
+        attributes
+      }) => {
+        const {
+          iconName,
+          iconColor,
+          backgroundColor,
+          hoverIconColor,
+          hoverBackgroundColor,
+          width,
+          height,
+          linkUrl,
+          linkTarget,
+          linkRel,
+          hasText,
+          text,
+          iconPosition,
+          screenReaderOnly,
+          gap,
+          iconBorderWidth,
+          iconBorderStyle,
+          iconBorderColor,
+          iconBorderRadius,
+          hoverBorderColor,
+          iconPadding,
+          animation,
+          animationStrength,
+          animationRepeat,
+          animationTrigger
+        } = attributes;
+
+        // Old behavior: also put padding/border CSS vars on the wrapper,
+        // so markup matches previously saved content.
+        const inlineStyles = {};
+        if (iconColor) {
+          inlineStyles['--icon-base-color'] = iconColor;
+        }
+        if (backgroundColor) {
+          inlineStyles['--icon-background-color'] = backgroundColor;
+        }
+        if (hoverIconColor) {
+          inlineStyles['--hover-icon-color'] = hoverIconColor;
+        } else if (iconColor) {
+          inlineStyles['--hover-icon-color'] = iconColor;
+        }
+        if (hoverBackgroundColor) {
+          inlineStyles['--hover-bg-color'] = hoverBackgroundColor;
+        } else if (backgroundColor) {
+          inlineStyles['--hover-bg-color'] = backgroundColor;
+        }
+        if (iconPadding !== undefined && iconPadding !== null) {
+          inlineStyles['--icon-padding'] = iconPadding;
+        }
+        if (iconBorderWidth) {
+          inlineStyles['--we-icon-frame-width'] = iconBorderWidth;
+        }
+        if (iconBorderStyle) {
+          inlineStyles['--we-icon-frame-style'] = iconBorderStyle;
+        }
+        if (iconBorderColor) {
+          inlineStyles['--we-icon-frame-color'] = iconBorderColor;
+        }
+        if (iconBorderRadius) {
+          inlineStyles['--we-icon-frame-radius'] = iconBorderRadius;
+        }
+        if (hoverBorderColor) {
+          inlineStyles['--hover-border-color'] = hoverBorderColor;
+        }
+        if (!linkUrl && hasText && gap !== undefined && gap !== null && gap !== '') {
+          inlineStyles.gap = gap;
+        }
+        if (width) {
+          inlineStyles['--icon-width'] = width;
+        }
+        if (height) {
+          inlineStyles['--icon-height'] = height;
+        }
+        if (animation && animation !== 'none') {
+          const strengthToDuration = {
+            soft: '4s',
+            normal: '2s',
+            strong: '1s'
+          };
+          const duration = strengthToDuration[animationStrength] || strengthToDuration.normal;
+          inlineStyles['--we-icon-animation-duration'] = duration;
+          inlineStyles['--we-icon-animation-iterations'] = animationRepeat === 'once' ? '1' : 'infinite';
+        }
+        const blockProps = useBlockProps.save({
+          style: inlineStyles,
+          className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''} ${animation && animation !== 'none' ? `icon-animation-trigger-${animationTrigger || 'always'}` : ''}`
+        });
+        const currentIcon = icons[iconName] || '';
+        return createElement("div", {
+          ...blockProps
+        }, linkUrl ? createElement("a", {
+          href: linkUrl,
+          target: linkTarget,
+          rel: linkTarget === '_blank' ? 'noopener noreferrer' : linkRel,
+          className: "wp-block-webentwicklerin-icon__link",
+          style: hasText && gap !== undefined && gap !== null && gap !== '' ? {
+            gap
+          } : undefined,
+          "aria-label": hasText && text ? `${text} (${iconName})` : iconName
+        }, hasText && text && iconPosition === 'top' && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text), createElement("div", {
+          className: "wp-block-webentwicklerin-icon__inner",
+          style: {
+            width,
+            height
+          },
+          "aria-hidden": hasText && text ? 'true' : undefined,
+          dangerouslySetInnerHTML: {
+            __html: currentIcon
+          }
+        }), hasText && text && iconPosition === 'bottom' && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text)) : createElement(Fragment, null, hasText && text && iconPosition === 'top' && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text), createElement("div", {
+          className: "wp-block-webentwicklerin-icon__inner",
+          style: {
+            width,
+            height
+          },
+          "aria-hidden": hasText && text ? 'true' : undefined,
+          dangerouslySetInnerHTML: {
+            __html: currentIcon
+          }
+        }), hasText && text && iconPosition === 'bottom' && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
+          className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+        }, text)));
+      }
+    }]
   });
 }

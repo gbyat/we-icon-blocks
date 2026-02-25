@@ -15,7 +15,7 @@ if (
 } else {
     const { createElement, Fragment, useState } = wp.element;
     const { registerBlockType } = wp.blocks;
-    const { InspectorControls, useBlockProps, PanelColorSettings, RichText, URLInput } = wp.blockEditor;
+    const { InspectorControls, useBlockProps, PanelColorSettings, RichText, URLInput, MediaUpload, MediaUploadCheck } = wp.blockEditor;
     const { PanelBody, SelectControl, RangeControl, ToggleControl, TextControl, Button, Modal } = wp.components;
     const { __ } = wp.i18n;
 
@@ -53,6 +53,11 @@ if (
                 animationStrength,
                 animationRepeat,
                 animationTrigger,
+                frameMode,
+                frameImageUrl,
+                frameFit,
+                frameColor,
+                frameSvgRaw,
             } = attributes;
 
             // Build inline styles
@@ -87,6 +92,14 @@ if (
             }
             if (height) {
                 inlineStyles['--icon-height'] = height;
+            }
+
+            // Optional background frame styling (color & fit)
+            if (frameColor) {
+                inlineStyles['--we-icon-frame-layer-color'] = frameColor;
+            }
+            if (frameFit) {
+                inlineStyles['--we-icon-frame-fit'] = frameFit;
             }
 
             // Icon padding & border are applied on the inner element, not on the wrapper.
@@ -471,6 +484,97 @@ if (
                             />
                         </PanelBody>
 
+                        <PanelBody title={__('Background Frame', 'we-icon-blocks')} initialOpen={false}>
+                            <SelectControl
+                                label={__('Frame source', 'we-icon-blocks')}
+                                value={frameMode || 'none'}
+                                options={[
+                                    { label: __('None', 'we-icon-blocks'), value: 'none' },
+                                    { label: __('Upload image/SVG', 'we-icon-blocks'), value: 'upload' },
+                                ]}
+                                onChange={(value) => setAttributes({ frameMode: value })}
+                                help={__('Optional decorative frame layer behind the icon', 'we-icon-blocks')}
+                            />
+
+                            {frameMode === 'upload' && (
+                                <>
+                                    <MediaUploadCheck>
+                                        <MediaUpload
+                                            onSelect={(media) => {
+                                                if (!media) {
+                                                    setAttributes({
+                                                        frameImageUrl: '',
+                                                        frameSvgRaw: '',
+                                                    });
+                                                    return;
+                                                }
+
+                                                const url = media.url || '';
+                                                const mime = media.mime || media.mime_type || '';
+
+                                                setAttributes({
+                                                    frameImageUrl: url,
+                                                });
+
+                                                const isSvg = mime === 'image/svg+xml' || (url && url.toLowerCase().endsWith('.svg'));
+
+                                                if (isSvg && window.wp && window.wp.apiFetch) {
+                                                    window.wp.apiFetch({ url })
+                                                        .then((svgText) => {
+                                                            if (typeof svgText === 'string') {
+                                                                setAttributes({ frameSvgRaw: svgText });
+                                                            }
+                                                        })
+                                                        // eslint-disable-next-line no-console
+                                                        .catch((error) => console.warn('we-icon-blocks: failed to fetch SVG for frame', error));
+                                                } else {
+                                                    setAttributes({ frameSvgRaw: '' });
+                                                }
+                                            }}
+                                            allowedTypes={['image']}
+                                            render={({ open }) => (
+                                                <Button
+                                                    onClick={open}
+                                                    variant="secondary"
+                                                    style={{ width: '100%', marginBottom: '10px' }}
+                                                >
+                                                    {frameImageUrl
+                                                        ? __('Change frame image', 'we-icon-blocks')
+                                                        : __('Select frame image or SVG', 'we-icon-blocks')}
+                                                </Button>
+                                            )}
+                                        />
+                                    </MediaUploadCheck>
+
+                                    <SelectControl
+                                        label={__('Frame fit', 'we-icon-blocks')}
+                                        value={frameFit || 'contain'}
+                                        options={[
+                                            { label: __('Contain', 'we-icon-blocks'), value: 'contain' },
+                                            { label: __('Cover', 'we-icon-blocks'), value: 'cover' },
+                                            { label: __('Fill', 'we-icon-blocks'), value: 'fill' },
+                                        ]}
+                                        onChange={(value) => setAttributes({ frameFit: value })}
+                                        help={__('How the frame image should fit inside the icon area', 'we-icon-blocks')}
+                                    />
+
+                                    {(frameSvgRaw || frameImageUrl) && (
+                                        <PanelColorSettings
+                                            title={__('Frame Color (SVG only)', 'we-icon-blocks')}
+                                            colorSettings={[
+                                                {
+                                                    value: frameColor,
+                                                    onChange: (newColor) => setAttributes({ frameColor: newColor }),
+                                                    label: __('Frame color', 'we-icon-blocks'),
+                                                    enableAlpha: true,
+                                                },
+                                            ]}
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </PanelBody>
+
                         <PanelBody title={__('Animation', 'we-icon-blocks')} initialOpen={false}>
                             <SelectControl
                                 label={__('Animation Type', 'we-icon-blocks')}
@@ -538,6 +642,20 @@ if (
                                 style={hasText && gap !== undefined && gap !== null && gap !== '' ? { gap } : undefined}
                                 aria-label={hasText && text ? `${text}` : `${iconName} icon`}
                             >
+                                {frameMode === 'upload' && (frameSvgRaw || frameImageUrl) && (
+                                    <div
+                                        className="wp-block-webentwicklerin-icon__frame"
+                                        aria-hidden="true"
+                                    >
+                                        {frameSvgRaw ? (
+                                            <span
+                                                dangerouslySetInnerHTML={{ __html: frameSvgRaw }}
+                                            />
+                                        ) : frameImageUrl ? (
+                                            <img src={frameImageUrl} alt="" />
+                                        ) : null}
+                                    </div>
+                                )}
                                 {iconPosition === 'top' && (
                                     <div
                                         className="wp-block-webentwicklerin-icon__inner"
@@ -566,6 +684,20 @@ if (
                             </a>
                         ) : (
                             <>
+                                {frameMode === 'upload' && (frameSvgRaw || frameImageUrl) && (
+                                    <div
+                                        className="wp-block-webentwicklerin-icon__frame"
+                                        aria-hidden="true"
+                                    >
+                                        {frameSvgRaw ? (
+                                            <span
+                                                dangerouslySetInnerHTML={{ __html: frameSvgRaw }}
+                                            />
+                                        ) : frameImageUrl ? (
+                                            <img src={frameImageUrl} alt="" />
+                                        ) : null}
+                                    </div>
+                                )}
                                 {iconPosition === 'top' && (
                                     <div
                                         className="wp-block-webentwicklerin-icon__inner"
@@ -625,6 +757,11 @@ if (
                 animationStrength,
                 animationRepeat,
                 animationTrigger,
+                frameMode,
+                frameImageUrl,
+                frameFit,
+                frameColor,
+                frameSvgRaw,
             } = attributes;
 
             // Build inline styles for save (wrapper-level only: colors, sizes, layout)
@@ -658,6 +795,14 @@ if (
             }
             if (height) {
                 inlineStyles['--icon-height'] = height;
+            }
+
+            // Optional background frame styling (color & fit)
+            if (frameColor) {
+                inlineStyles['--we-icon-frame-layer-color'] = frameColor;
+            }
+            if (frameFit) {
+                inlineStyles['--we-icon-frame-fit'] = frameFit;
             }
 
             // Animation controls: duration & iteration via CSS variables
@@ -721,6 +866,20 @@ if (
                             style={hasText && gap !== undefined && gap !== null && gap !== '' ? { gap } : undefined}
                             aria-label={hasText && text ? `${text} (${iconName})` : iconName}
                         >
+                            {frameMode === 'upload' && (frameSvgRaw || frameImageUrl) && (
+                                <div
+                                    className="wp-block-webentwicklerin-icon__frame"
+                                    aria-hidden="true"
+                                >
+                                    {frameSvgRaw ? (
+                                        <span
+                                            dangerouslySetInnerHTML={{ __html: frameSvgRaw }}
+                                        />
+                                    ) : frameImageUrl ? (
+                                        <img src={frameImageUrl} alt="" />
+                                    ) : null}
+                                </div>
+                            )}
                             {hasText && text && iconPosition === 'top' && (
                                 <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
                             )}
@@ -739,6 +898,20 @@ if (
                         </a>
                     ) : (
                         <>
+                            {frameMode === 'upload' && (frameSvgRaw || frameImageUrl) && (
+                                <div
+                                    className="wp-block-webentwicklerin-icon__frame"
+                                    aria-hidden="true"
+                                >
+                                    {frameSvgRaw ? (
+                                        <span
+                                            dangerouslySetInnerHTML={{ __html: frameSvgRaw }}
+                                        />
+                                    ) : frameImageUrl ? (
+                                        <img src={frameImageUrl} alt="" />
+                                    ) : null}
+                                </div>
+                            )}
                             {hasText && text && iconPosition === 'top' && (
                                 <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
                             )}
@@ -758,6 +931,251 @@ if (
                     )}
                 </div>
             );
-        }
+        },
+
+        deprecated: [
+            {
+                attributes: {
+                    iconName: {
+                        type: 'string',
+                        default: 'arrow-up',
+                    },
+                    iconColor: {
+                        type: 'string',
+                    },
+                    backgroundColor: {
+                        type: 'string',
+                    },
+                    hoverIconColor: {
+                        type: 'string',
+                    },
+                    hoverBackgroundColor: {
+                        type: 'string',
+                    },
+                    width: {
+                        type: 'string',
+                        default: '24px',
+                    },
+                    height: {
+                        type: 'string',
+                        default: '24px',
+                    },
+                    linkUrl: {
+                        type: 'string',
+                    },
+                    linkTarget: {
+                        type: 'string',
+                        default: '_self',
+                    },
+                    linkRel: {
+                        type: 'string',
+                    },
+                    hasText: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    text: {
+                        type: 'string',
+                    },
+                    iconPosition: {
+                        type: 'string',
+                        default: 'left',
+                    },
+                    screenReaderOnly: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    gap: {
+                        type: 'string',
+                        default: '0.5em',
+                    },
+                    iconBorderWidth: {
+                        type: 'string',
+                    },
+                    iconBorderStyle: {
+                        type: 'string',
+                        default: 'solid',
+                    },
+                    iconBorderColor: {
+                        type: 'string',
+                    },
+                    iconBorderRadius: {
+                        type: 'string',
+                        default: '4px',
+                    },
+                    hoverBorderColor: {
+                        type: 'string',
+                    },
+                    iconPadding: {
+                        type: 'string',
+                        default: '0',
+                    },
+                    animation: {
+                        type: 'string',
+                        default: 'none',
+                    },
+                    animationStrength: {
+                        type: 'string',
+                        default: 'normal',
+                    },
+                    animationRepeat: {
+                        type: 'string',
+                        default: 'loop',
+                    },
+                    animationTrigger: {
+                        type: 'string',
+                        default: 'always',
+                    },
+                },
+
+                save: ({ attributes }) => {
+                    const {
+                        iconName,
+                        iconColor,
+                        backgroundColor,
+                        hoverIconColor,
+                        hoverBackgroundColor,
+                        width,
+                        height,
+                        linkUrl,
+                        linkTarget,
+                        linkRel,
+                        hasText,
+                        text,
+                        iconPosition,
+                        screenReaderOnly,
+                        gap,
+                        iconBorderWidth,
+                        iconBorderStyle,
+                        iconBorderColor,
+                        iconBorderRadius,
+                        hoverBorderColor,
+                        iconPadding,
+                        animation,
+                        animationStrength,
+                        animationRepeat,
+                        animationTrigger,
+                    } = attributes;
+
+                    // Old behavior: also put padding/border CSS vars on the wrapper,
+                    // so markup matches previously saved content.
+                    const inlineStyles = {};
+
+                    if (iconColor) {
+                        inlineStyles['--icon-base-color'] = iconColor;
+                    }
+                    if (backgroundColor) {
+                        inlineStyles['--icon-background-color'] = backgroundColor;
+                    }
+                    if (hoverIconColor) {
+                        inlineStyles['--hover-icon-color'] = hoverIconColor;
+                    } else if (iconColor) {
+                        inlineStyles['--hover-icon-color'] = iconColor;
+                    }
+                    if (hoverBackgroundColor) {
+                        inlineStyles['--hover-bg-color'] = hoverBackgroundColor;
+                    } else if (backgroundColor) {
+                        inlineStyles['--hover-bg-color'] = backgroundColor;
+                    }
+
+                    if (iconPadding !== undefined && iconPadding !== null) {
+                        inlineStyles['--icon-padding'] = iconPadding;
+                    }
+                    if (iconBorderWidth) {
+                        inlineStyles['--we-icon-frame-width'] = iconBorderWidth;
+                    }
+                    if (iconBorderStyle) {
+                        inlineStyles['--we-icon-frame-style'] = iconBorderStyle;
+                    }
+                    if (iconBorderColor) {
+                        inlineStyles['--we-icon-frame-color'] = iconBorderColor;
+                    }
+                    if (iconBorderRadius) {
+                        inlineStyles['--we-icon-frame-radius'] = iconBorderRadius;
+                    }
+                    if (hoverBorderColor) {
+                        inlineStyles['--hover-border-color'] = hoverBorderColor;
+                    }
+
+                    if (!linkUrl && hasText && gap !== undefined && gap !== null && gap !== '') {
+                        inlineStyles.gap = gap;
+                    }
+
+                    if (width) {
+                        inlineStyles['--icon-width'] = width;
+                    }
+                    if (height) {
+                        inlineStyles['--icon-height'] = height;
+                    }
+
+                    if (animation && animation !== 'none') {
+                        const strengthToDuration = {
+                            soft: '4s',
+                            normal: '2s',
+                            strong: '1s',
+                        };
+                        const duration = strengthToDuration[animationStrength] || strengthToDuration.normal;
+                        inlineStyles['--we-icon-animation-duration'] = duration;
+                        inlineStyles['--we-icon-animation-iterations'] = animationRepeat === 'once' ? '1' : 'infinite';
+                    }
+
+                    const blockProps = useBlockProps.save({
+                        style: inlineStyles,
+                        className: `icon-position-${iconPosition} ${hasText ? 'has-text' : 'no-text'} ${animation !== 'none' ? `icon-animation-${animation}` : ''} ${animation && animation !== 'none' ? `icon-animation-trigger-${animationTrigger || 'always'}` : ''}`
+                    });
+
+                    const currentIcon = icons[iconName] || '';
+
+                    return (
+                        <div {...blockProps}>
+                            {linkUrl ? (
+                                <a
+                                    href={linkUrl}
+                                    target={linkTarget}
+                                    rel={linkTarget === '_blank' ? 'noopener noreferrer' : linkRel}
+                                    className="wp-block-webentwicklerin-icon__link"
+                                    style={hasText && gap !== undefined && gap !== null && gap !== '' ? { gap } : undefined}
+                                    aria-label={hasText && text ? `${text} (${iconName})` : iconName}
+                                >
+                                    {hasText && text && iconPosition === 'top' && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                    <div
+                                        className="wp-block-webentwicklerin-icon__inner"
+                                        style={{ width, height }}
+                                        aria-hidden={hasText && text ? 'true' : undefined}
+                                        dangerouslySetInnerHTML={{ __html: currentIcon }}
+                                    />
+                                    {hasText && text && iconPosition === 'bottom' && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                    {hasText && text && (iconPosition === 'left' || iconPosition === 'right') && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                </a>
+                            ) : (
+                                <>
+                                    {hasText && text && iconPosition === 'top' && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                    <div
+                                        className="wp-block-webentwicklerin-icon__inner"
+                                        style={{ width, height }}
+                                        aria-hidden={hasText && text ? 'true' : undefined}
+                                        dangerouslySetInnerHTML={{ __html: currentIcon }}
+                                    />
+                                    {hasText && text && iconPosition === 'bottom' && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                    {hasText && text && (iconPosition === 'left' || iconPosition === 'right') && (
+                                        <span className={screenReaderOnly ? 'screen-reader-text' : 'icon-text'}>{text}</span>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    );
+                },
+            },
+        ],
     });
 }

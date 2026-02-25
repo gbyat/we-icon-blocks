@@ -3,6 +3,8 @@
 	align-items: center;
 	justify-content: center;
 	transition: color 0.3s ease;
+	position: relative;
+	overflow: visible;
 }
 
 /* Override WordPress float alignment - use flexbox instead for better control */
@@ -63,6 +65,36 @@
 	background-color: var(--icon-background-color, transparent);
 	border: var(--we-icon-frame-width, 0) var(--we-icon-frame-style, solid) var(--we-icon-frame-color, transparent);
 	border-radius: var(--we-icon-frame-radius, 4px);
+}
+
+/* Optional background frame layer behind the icon */
+.wp-block-webentwicklerin-icon__frame {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	z-index: 0;
+}
+
+.wp-block-webentwicklerin-icon__frame svg {
+	width: 100%;
+	height: 100%;
+	color: var(--we-icon-frame-layer-color, currentColor);
+}
+
+.wp-block-webentwicklerin-icon__frame img {
+	width: 100%;
+	height: 100%;
+	object-fit: var(--we-icon-frame-fit, contain);
+}
+
+/* Ensure icon/link content renders above the frame */
+.wp-block-webentwicklerin-icon__inner,
+.wp-block-webentwicklerin-icon__link {
+	position: relative;
+	z-index: 1;
 }
 
 /* Icon Layout Variants */
@@ -156,6 +188,18 @@
 .wp-block-webentwicklerin-icon svg g {
 	fill: var(--icon-base-color, currentColor) !important;
 	transition: fill 0.3s ease;
+}
+
+/* Allow frame SVGs to use a dedicated color variable if provided */
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg path,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg polygon,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg circle,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg rect,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg line,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg ellipse,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg polyline,
+.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg g {
+	fill: var(--we-icon-frame-layer-color, var(--icon-base-color, currentColor)) !important;
 }
 
 /* Screen reader text */
