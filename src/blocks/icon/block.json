@@ -53,7 +53,7 @@
     },
     "iconPosition": {
       "type": "string",
-      "default": "left"
+      "default": "top"
     },
     "screenReaderOnly": {
       "type": "boolean",
@@ -104,6 +104,9 @@
       "type": "string",
       "default": "none"
     },
+    "frameIconName": {
+      "type": "string"
+    },
     "frameImageUrl": {
       "type": "string"
     },
@@ -116,6 +119,20 @@
     },
     "frameSvgRaw": {
       "type": "string"
+    },
+    "framePadding": {
+      "type": "string",
+      "default": "0"
+    },
+    "frameHoverColor": {
+      "type": "string"
+    },
+    "frameSvgManual": {
+      "type": "string"
+    },
+    "frameSvgAdvanced": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

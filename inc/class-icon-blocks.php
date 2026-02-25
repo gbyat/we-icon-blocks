@@ -19,6 +19,7 @@ use function register_block_type;
 use function scandir;
 use function wp_enqueue_script;
 use function wp_set_script_translations;
+use WP_Block_Type_Registry;
 
 /**
  * Main plugin orchestrator.
@@ -53,6 +54,7 @@ final class WE_Icon_Blocks
         add_action('plugins_loaded', [$this, 'init_github_updater'], 5);
         add_action('enqueue_block_editor_assets', [$this, 'enqueue_editor_assets']);
         add_action('enqueue_block_editor_assets', [$this, 'set_block_script_translations']);
+        add_action('enqueue_block_editor_assets', [$this, 'expose_editor_capabilities']);
     }
 
     /**
@@ -89,7 +91,8 @@ final class WE_Icon_Blocks
      */
     public function set_block_script_translations(): void
     {
-        $registry = \WP_Block_Type_Registry::get_instance();
+        // @phpstan-ignore-next-line - runtime class provided by WordPress.
+        $registry = WP_Block_Type_Registry::get_instance();
         $block_type = $registry->get_registered('webentwicklerin/icon');
 
         if (! $block_type) {
@@ -127,6 +130,32 @@ final class WE_Icon_Blocks
             ['wp-hooks', 'wp-blocks'],
             '0.1.0',
             true
+        );
+    }
+
+    /**
+     * Expose editor capabilities (e.g. whether advanced SVG editing is allowed) to JS.
+     */
+    public function expose_editor_capabilities(): void
+    {
+        $can_edit_svg = current_user_can('unfiltered_html');
+        $flag         = $can_edit_svg ? 'true' : 'false';
+
+        // Register a tiny helper script and attach the flag so it is always available in the editor.
+        wp_register_script(
+            'we-icon-blocks-editor-flags',
+            '',
+            [],
+            WE_ICON_BLOCKS_VERSION,
+            true
+        );
+
+        wp_enqueue_script('we-icon-blocks-editor-flags');
+
+        wp_add_inline_script(
+            'we-icon-blocks-editor-flags',
+            'window.weIconBlocksCanEditSvg = ' . $flag . ';',
+            'before'
         );
     }
 

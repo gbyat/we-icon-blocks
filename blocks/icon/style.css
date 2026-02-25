@@ -69,8 +69,15 @@
 
 /* Optional background frame layer behind the icon */
 .wp-block-webentwicklerin-icon__frame {
-	position: absolute;
-	inset: 0;
+	position: relative;
+	width: calc(
+		var(--icon-width, 1.5em)
+		+ 2 * (var(--icon-padding, 0) + var(--we-icon-frame-padding, 0))
+	);
+	height: calc(
+		var(--icon-height, 1.5em)
+		+ 2 * (var(--icon-padding, 0) + var(--we-icon-frame-padding, 0))
+	);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -78,15 +85,19 @@
 	z-index: 0;
 }
 
-.wp-block-webentwicklerin-icon__frame svg {
+.wp-block-webentwicklerin-icon__frame > span svg,
+.wp-block-webentwicklerin-icon__frame > img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
+}
+
+.wp-block-webentwicklerin-icon__frame > span svg {
 	color: var(--we-icon-frame-layer-color, currentColor);
 }
 
 .wp-block-webentwicklerin-icon__frame img {
-	width: 100%;
-	height: 100%;
 	object-fit: var(--we-icon-frame-fit, contain);
 }
 
@@ -160,12 +171,18 @@
     justify-content: flex-end;
 }
 
-/* Icon color and size come from CSS vars */
-.wp-block-webentwicklerin-icon svg {
+/* Icon color and size come from CSS vars (inner icon only) */
+.wp-block-webentwicklerin-icon__inner svg {
 	width: var(--icon-width, 1em);
 	height: var(--icon-height, 1em);
+	max-width: none;
 	transition: fill 0.3s ease;
 	flex-shrink: 0;
+}
+
+/* In the editor, override the theme's generic max-width:100% svg rule */
+.editor-styles-wrapper .wp-block-webentwicklerin-icon__inner svg {
+	max-width: none;
 }
 
 /* Icon wrapper for additional styling options */
@@ -178,28 +195,42 @@
 	box-sizing: border-box;
 }
 
-.wp-block-webentwicklerin-icon svg path,
-.wp-block-webentwicklerin-icon svg polygon,
-.wp-block-webentwicklerin-icon svg circle,
-.wp-block-webentwicklerin-icon svg rect,
-.wp-block-webentwicklerin-icon svg line,
-.wp-block-webentwicklerin-icon svg ellipse,
-.wp-block-webentwicklerin-icon svg polyline,
-.wp-block-webentwicklerin-icon svg g {
-	fill: var(--icon-base-color, currentColor) !important;
+.wp-block-webentwicklerin-icon__inner svg path,
+.wp-block-webentwicklerin-icon__inner svg polygon,
+.wp-block-webentwicklerin-icon__inner svg circle,
+.wp-block-webentwicklerin-icon__inner svg rect,
+.wp-block-webentwicklerin-icon__inner svg line,
+.wp-block-webentwicklerin-icon__inner svg ellipse,
+.wp-block-webentwicklerin-icon__inner svg polyline,
+.wp-block-webentwicklerin-icon__inner svg g {
+	fill: var(--icon-base-color, currentColor);
 	transition: fill 0.3s ease;
 }
 
 /* Allow frame SVGs to use a dedicated color variable if provided */
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg path,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg polygon,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg circle,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg rect,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg line,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg ellipse,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg polyline,
-.wp-block-webentwicklerin-icon .wp-block-webentwicklerin-icon__frame svg g {
-	fill: var(--we-icon-frame-layer-color, var(--icon-base-color, currentColor)) !important;
+.wp-block-webentwicklerin-icon__frame > span svg path,
+.wp-block-webentwicklerin-icon__frame > span svg polygon,
+.wp-block-webentwicklerin-icon__frame > span svg circle,
+.wp-block-webentwicklerin-icon__frame > span svg rect,
+.wp-block-webentwicklerin-icon__frame > span svg line,
+.wp-block-webentwicklerin-icon__frame > span svg ellipse,
+.wp-block-webentwicklerin-icon__frame > span svg polyline,
+.wp-block-webentwicklerin-icon__frame > span svg g {
+	fill: var(--we-icon-frame-layer-color, currentColor);
+	stroke: var(--we-icon-frame-layer-color, currentColor);
+}
+
+/* Optional hover color for frame SVG (independent from icon hover color) */
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg path,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg polygon,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg circle,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg rect,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg line,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg ellipse,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg polyline,
+.wp-block-webentwicklerin-icon:hover .wp-block-webentwicklerin-icon__frame > span svg g {
+	fill: var(--we-icon-frame-hover-layer-color, var(--we-icon-frame-layer-color, currentColor));
+	stroke: var(--we-icon-frame-hover-layer-color, var(--we-icon-frame-layer-color, currentColor));
 }
 
 /* Screen reader text */

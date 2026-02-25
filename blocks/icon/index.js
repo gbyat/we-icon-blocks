@@ -1,27 +1,67 @@
 // Bail out early if the block editor globals are not available (e.g. in some Site Editor flows)
+// Basic sanitizing of SVG used for the frame layer.
+function sanitizeFrameSvg(svgText) {
+  if (typeof svgText !== 'string') {
+    return '';
+  }
+  try {
+    if (typeof window === 'undefined' || typeof window.DOMParser === 'undefined') {
+      return svgText;
+    }
+    const parser = new window.DOMParser();
+    const doc = parser.parseFromString(svgText, 'image/svg+xml');
+    const svg = doc.querySelector('svg');
+    if (!svg) {
+      return '';
+    }
+
+    // Remove obviously dangerous elements.
+    svg.querySelectorAll('script, foreignObject, iframe').forEach(el => el.remove());
+
+    // Strip event handlers, style attributes and normalise fill/stroke to currentColor.
+    svg.querySelectorAll('*').forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        const name = attr.name.toLowerCase();
+        if (name.startsWith('on') || name === 'style') {
+          el.removeAttribute(attr.name);
+        }
+      });
+      if (el.hasAttribute('fill')) {
+        el.setAttribute('fill', 'currentColor');
+      }
+      if (el.hasAttribute('stroke')) {
+        el.setAttribute('stroke', 'currentColor');
+      }
+    });
+    const serializer = new XMLSerializer();
+    return serializer.serializeToString(svg);
+  } catch (e) {
+    return '';
+  }
+}
 if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window.wp.element || !window.wp.blocks || !window.wp.blockEditor || !window.wp.components || !window.wp.i18n) {
   // Do not throw – just skip block registration in unsupported contexts.
   // This avoids "wp.element is undefined" errors in the Site Editor.
   // eslint-disable-next-line no-console
   console.warn('we-icon-blocks: wp global not available, skipping block registration in this context.');
 } else {
-    const {
-      createElement,
-      Fragment,
-      useState
-    } = wp.element;
-    const {
-      registerBlockType
-    } = wp.blocks;
-    const {
-      InspectorControls,
-      useBlockProps,
-      PanelColorSettings,
-      RichText,
-      URLInput,
-      MediaUpload,
-      MediaUploadCheck
-    } = wp.blockEditor;
+  const {
+    createElement,
+    Fragment,
+    useState
+  } = wp.element;
+  const {
+    registerBlockType
+  } = wp.blocks;
+  const {
+    InspectorControls,
+    useBlockProps,
+    PanelColorSettings,
+    RichText,
+    URLInput,
+    MediaUpload,
+    MediaUploadCheck
+  } = wp.blockEditor;
   const {
     PanelBody,
     SelectControl,
@@ -29,7 +69,8 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
     ToggleControl,
     TextControl,
     Button,
-    Modal
+    Modal,
+    TextareaControl
   } = wp.components;
   const {
     __
@@ -69,10 +110,15 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         animationRepeat,
         animationTrigger,
         frameMode,
+        frameIconName,
         frameImageUrl,
         frameFit,
         frameColor,
-        frameSvgRaw
+        frameHoverColor,
+        frameSvgRaw,
+        framePadding,
+        frameSvgManual,
+        frameSvgAdvanced
       } = attributes;
 
       // Build inline styles
@@ -109,12 +155,23 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         inlineStyles['--icon-height'] = height;
       }
 
-      // Optional background frame styling (color & fit)
+      // Expose icon padding so the frame can size itself based on icon + icon padding
+      if (iconPadding !== undefined && iconPadding !== null) {
+        inlineStyles['--icon-padding'] = iconPadding;
+      }
+
+      // Optional background frame styling (color, fit, extra padding)
       if (frameColor) {
         inlineStyles['--we-icon-frame-layer-color'] = frameColor;
       }
+      if (frameHoverColor) {
+        inlineStyles['--we-icon-frame-hover-layer-color'] = frameHoverColor;
+      }
       if (frameFit) {
         inlineStyles['--we-icon-frame-fit'] = frameFit;
+      }
+      if (framePadding !== undefined && framePadding !== null) {
+        inlineStyles['--we-icon-frame-padding'] = framePadding;
       }
 
       // Icon padding & border are applied on the inner element, not on the wrapper.
@@ -275,6 +332,7 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         }, iconKey.replace(/-/g, ' ')))))));
       };
       const currentIcon = icons[iconName] || '';
+      const effectiveFrameSvg = frameSvgAdvanced && frameSvgManual ? frameSvgManual : frameSvgRaw;
       return createElement(Fragment, null, createElement(InspectorControls, null, createElement(PanelBody, {
         title: __('Icon Settings', 'we-icon-blocks'),
         initialOpen: true
@@ -345,12 +403,6 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         onChange: value => setAttributes({
           hasText: value
         })
-      }), hasText && createElement(Fragment, null, createElement(TextControl, {
-        label: __('Text', 'we-icon-blocks'),
-        value: text,
-        onChange: value => setAttributes({
-          text: value
-        })
       }), createElement(SelectControl, {
         label: __('Icon position', 'we-icon-blocks'),
         value: iconPosition,
@@ -369,6 +421,13 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         }],
         onChange: value => setAttributes({
           iconPosition: value
+        }),
+        help: __('Used when text is visible; has no visual effect without text', 'we-icon-blocks')
+      }), hasText && createElement(Fragment, null, createElement(TextControl, {
+        label: __('Text', 'we-icon-blocks'),
+        value: text,
+        onChange: value => setAttributes({
+          text: value
         })
       }), createElement(TextControl, {
         label: __('Gap between icon and text', 'we-icon-blocks'),
@@ -489,6 +548,162 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         step: 0.1,
         help: __('Inner spacing around the icon (0–15em)', 'we-icon-blocks')
       })), createElement(PanelBody, {
+        title: __('Background Frame', 'we-icon-blocks'),
+        initialOpen: false
+      }, createElement(SelectControl, {
+        label: __('Frame source', 'we-icon-blocks'),
+        value: frameMode || 'none',
+        options: [{
+          label: __('None', 'we-icon-blocks'),
+          value: 'none'
+        }, {
+          label: __('Upload image/SVG', 'we-icon-blocks'),
+          value: 'upload'
+        }, {
+          label: __('Icon library SVG', 'we-icon-blocks'),
+          value: 'library'
+        }],
+        onChange: value => {
+          const update = {
+            frameMode: value
+          };
+          if (value === 'none') {
+            update.frameImageUrl = '';
+            update.frameSvgRaw = '';
+            update.frameIconName = '';
+          }
+          setAttributes(update);
+        },
+        help: __('Optional decorative frame layer behind the icon', 'we-icon-blocks')
+      }), frameMode === 'upload' && createElement(Fragment, null, createElement(MediaUploadCheck, null, createElement(MediaUpload, {
+        onSelect: media => {
+          if (!media) {
+            setAttributes({
+              frameImageUrl: '',
+              frameSvgRaw: ''
+            });
+            return;
+          }
+          const url = media.url || '';
+          const mime = media.mime || media.mime_type || '';
+          setAttributes({
+            frameImageUrl: url
+          });
+          const isSvg = mime === 'image/svg+xml' || url && url.toLowerCase().endsWith('.svg');
+          if (isSvg && typeof window !== 'undefined' && window.fetch) {
+            window.fetch(url, {
+              credentials: 'same-origin'
+            }).then(response => response.text()).then(svgText => {
+              if (typeof svgText === 'string') {
+                const safe = sanitizeFrameSvg(svgText);
+                setAttributes({
+                  frameSvgRaw: safe
+                });
+              }
+            })
+            // eslint-disable-next-line no-console
+            .catch(error => console.warn('we-icon-blocks: failed to fetch SVG for frame', error));
+          } else {
+            setAttributes({
+              frameSvgRaw: ''
+            });
+          }
+        },
+        allowedTypes: ['image'],
+        render: ({
+          open
+        }) => createElement(Button, {
+          onClick: open,
+          variant: "secondary",
+          style: {
+            width: '100%',
+            marginBottom: '10px'
+          }
+        }, frameImageUrl ? __('Change frame image', 'we-icon-blocks') : __('Select frame image or SVG', 'we-icon-blocks'))
+      })), createElement(SelectControl, {
+        label: __('Frame fit', 'we-icon-blocks'),
+        value: frameFit || 'contain',
+        options: [{
+          label: __('Contain', 'we-icon-blocks'),
+          value: 'contain'
+        }, {
+          label: __('Cover', 'we-icon-blocks'),
+          value: 'cover'
+        }, {
+          label: __('Fill', 'we-icon-blocks'),
+          value: 'fill'
+        }],
+        onChange: value => setAttributes({
+          frameFit: value
+        }),
+        help: __('How the frame image should fit inside the icon area', 'we-icon-blocks')
+      })), frameMode === 'library' && createElement(SelectControl, {
+        label: __('Frame SVG from icon library', 'we-icon-blocks'),
+        value: frameIconName || '',
+        options: [{
+          label: __('Select frame icon…', 'we-icon-blocks'),
+          value: ''
+        }, ...iconOptions],
+        onChange: value => {
+          if (!value) {
+            setAttributes({
+              frameIconName: '',
+              frameSvgRaw: ''
+            });
+            return;
+          }
+          const svgMarkup = icons[value] || '';
+          const safe = sanitizeFrameSvg(svgMarkup);
+          setAttributes({
+            frameIconName: value,
+            frameSvgRaw: safe,
+            frameImageUrl: ''
+          });
+        },
+        help: __('Use one of the built-in icons as a frame shape', 'we-icon-blocks')
+      }), frameMode && frameMode !== 'none' && createElement(Fragment, null, createElement(RangeControl, {
+        label: __('Frame Padding (em)', 'we-icon-blocks'),
+        value: parseFloat(framePadding) || 0,
+        onChange: value => setAttributes({
+          framePadding: value === 0 ? '0' : value + 'em'
+        }),
+        min: 0,
+        max: 10,
+        step: 0.1,
+        help: __('Extra padding between frame edge and icon (0–10em)', 'we-icon-blocks')
+      }), (frameSvgRaw || frameImageUrl) && createElement(PanelColorSettings, {
+        title: __('Frame Color (SVG only)', 'we-icon-blocks'),
+        colorSettings: [{
+          value: frameColor,
+          onChange: newColor => setAttributes({
+            frameColor: newColor
+          }),
+          label: __('Frame color', 'we-icon-blocks'),
+          enableAlpha: true
+        }, {
+          value: frameHoverColor,
+          onChange: newColor => setAttributes({
+            frameHoverColor: newColor
+          }),
+          label: __('Frame hover color', 'we-icon-blocks'),
+          enableAlpha: true
+        }]
+      }), typeof window !== 'undefined' && window.weIconBlocksCanEditSvg && createElement(Fragment, null, createElement(ToggleControl, {
+        label: __('Enable advanced SVG code (experts only)', 'we-icon-blocks'),
+        checked: frameSvgAdvanced,
+        onChange: value => setAttributes({
+          frameSvgAdvanced: value
+        }),
+        help: __('Allows pasting raw SVG XML for the frame. Only use if you know what you are doing.', 'we-icon-blocks')
+      }), frameSvgAdvanced && createElement(TextareaControl, {
+        label: __('Custom frame SVG (XML)', 'we-icon-blocks'),
+        value: frameSvgManual || '',
+        onChange: value => setAttributes({
+          frameSvgManual: sanitizeFrameSvg(value)
+        }),
+        help: __('Paste only safe <svg> code without scripts. Colors should use currentColor.', 'we-icon-blocks'),
+        rows: 5
+      })))), createElement(PanelBody, {
         title: __('Animation', 'we-icon-blocks'),
         initialOpen: false
       }, createElement(SelectControl, {
@@ -522,13 +737,13 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         value: animationStrength || 'normal',
         options: [{
           label: __('Fast', 'we-icon-blocks'),
-          value: 'soft'
+          value: 'strong'
         }, {
           label: __('Medium', 'we-icon-blocks'),
           value: 'normal'
         }, {
           label: __('Slow', 'we-icon-blocks'),
-          value: 'strong'
+          value: 'soft'
         }],
         onChange: value => setAttributes({
           animationStrength: value
@@ -573,47 +788,111 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
           gap
         } : undefined,
         "aria-label": hasText && text ? `${text}` : `${iconName} icon`
-      }, iconPosition === 'top' && createElement("div", {
+      }, iconPosition === 'top' && createElement(Fragment, null, frameMode && frameMode !== 'none' && (effectiveFrameSvg || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, effectiveFrameSvg ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: effectiveFrameSvg
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'top' && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), (iconPosition === 'left' || iconPosition === 'right' || iconPosition === 'bottom') && createElement("div", {
+      })) : createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'bottom' && createElement("span", {
+      }), hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
+      }, text)), iconPosition !== 'top' && createElement(Fragment, null, iconPosition === 'bottom' && hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text)) : createElement(Fragment, null, iconPosition === 'top' && createElement("div", {
+      }, text), frameMode && frameMode !== 'none' && (effectiveFrameSvg || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, effectiveFrameSvg ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: effectiveFrameSvg
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'top' && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), (iconPosition === 'left' || iconPosition === 'right' || iconPosition === 'bottom') && createElement("div", {
+      })) : createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'bottom' && createElement("span", {
+      }), iconPosition !== 'bottom' && hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
+      }, text))) : createElement(Fragment, null, iconPosition === 'top' && createElement(Fragment, null, frameMode && frameMode !== 'none' && (effectiveFrameSvg || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, effectiveFrameSvg ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: effectiveFrameSvg
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      })) : createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      }), hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text))));
+      }, text)), iconPosition !== 'top' && createElement(Fragment, null, iconPosition === 'bottom' && hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text), frameMode && frameMode !== 'none' && (effectiveFrameSvg || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, effectiveFrameSvg ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: effectiveFrameSvg
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      })) : createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      }), iconPosition !== 'bottom' && hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text)))));
     },
     save: ({
       attributes
@@ -643,7 +922,17 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         animation,
         animationStrength,
         animationRepeat,
-        animationTrigger
+        animationTrigger,
+        frameMode,
+        frameIconName,
+        frameImageUrl,
+        frameFit,
+        frameColor,
+        frameHoverColor,
+        frameSvgRaw,
+        framePadding,
+        frameSvgManual,
+        frameSvgAdvanced
       } = attributes;
 
       // Build inline styles for save (wrapper-level only: colors, sizes, layout)
@@ -676,6 +965,25 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }
       if (height) {
         inlineStyles['--icon-height'] = height;
+      }
+
+      // Expose icon padding so the frame can size itself based on icon + icon padding
+      if (iconPadding !== undefined && iconPadding !== null) {
+        inlineStyles['--icon-padding'] = iconPadding;
+      }
+
+      // Optional background frame styling (color, fit, extra padding)
+      if (frameColor) {
+        inlineStyles['--we-icon-frame-layer-color'] = frameColor;
+      }
+      if (frameHoverColor) {
+        inlineStyles['--we-icon-frame-hover-layer-color'] = frameHoverColor;
+      }
+      if (frameFit) {
+        inlineStyles['--we-icon-frame-fit'] = frameFit;
+      }
+      if (framePadding !== undefined && framePadding !== null) {
+        inlineStyles['--we-icon-frame-padding'] = framePadding;
       }
 
       // Animation controls: duration & iteration via CSS variables
@@ -734,33 +1042,111 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
           gap
         } : undefined,
         "aria-label": hasText && text ? `${text} (${iconName})` : iconName
-      }, hasText && text && iconPosition === 'top' && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), createElement("div", {
+      }, iconPosition === 'top' && createElement(Fragment, null, frameMode && frameMode !== 'none' && (frameSvgRaw || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, frameSvgRaw ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: frameSvgRaw
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'bottom' && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text)) : createElement(Fragment, null, hasText && text && iconPosition === 'top' && createElement("span", {
-        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), createElement("div", {
+      })) : createElement("div", {
         className: "wp-block-webentwicklerin-icon__inner",
         style: getInnerStyles(),
         "aria-hidden": hasText && text ? 'true' : undefined,
         dangerouslySetInnerHTML: {
           __html: currentIcon
         }
-      }), hasText && text && iconPosition === 'bottom' && createElement("span", {
+      }), hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text), hasText && text && (iconPosition === 'left' || iconPosition === 'right') && createElement("span", {
+      }, text)), iconPosition !== 'top' && createElement(Fragment, null, iconPosition === 'bottom' && hasText && text && createElement("span", {
         className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
-      }, text)));
+      }, text), frameMode && frameMode !== 'none' && (frameSvgRaw || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, frameSvgRaw ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: frameSvgRaw
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      })) : createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      }), iconPosition !== 'bottom' && hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text))) : createElement(Fragment, null, iconPosition === 'top' && createElement(Fragment, null, frameMode && frameMode !== 'none' && (frameSvgRaw || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, frameSvgRaw ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: frameSvgRaw
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      })) : createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      }), hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text)), iconPosition !== 'top' && createElement(Fragment, null, iconPosition === 'bottom' && hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text), frameMode && frameMode !== 'none' && (frameSvgRaw || frameImageUrl) ? createElement("div", {
+        className: "wp-block-webentwicklerin-icon__frame"
+      }, frameSvgRaw ? createElement("span", {
+        dangerouslySetInnerHTML: {
+          __html: frameSvgRaw
+        }
+      }) : frameImageUrl ? createElement("img", {
+        src: frameImageUrl,
+        alt: ""
+      }) : null, createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      })) : createElement("div", {
+        className: "wp-block-webentwicklerin-icon__inner",
+        style: getInnerStyles(),
+        "aria-hidden": hasText && text ? 'true' : undefined,
+        dangerouslySetInnerHTML: {
+          __html: currentIcon
+        }
+      }), iconPosition !== 'bottom' && hasText && text && createElement("span", {
+        className: screenReaderOnly ? 'screen-reader-text' : 'icon-text'
+      }, text))));
     },
     deprecated: [{
       attributes: {
@@ -807,7 +1193,7 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
         },
         iconPosition: {
           type: 'string',
-          default: 'left'
+          default: 'top'
         },
         screenReaderOnly: {
           type: 'boolean',
