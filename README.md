@@ -19,11 +19,12 @@ It is designed as a small, focused plugin that provides a reusable SVG icon set 
 
 - **Icon block for Gutenberg**: Insert icons anywhere in your content or navigation menus.
 - **SVG icon library**: Icons are rendered as SVGs for crisp display on all resolutions.
-- **Layout options**: Icon left/right/top/bottom in relation to the text, configurable gap.
+- **Layout options**: Icon left/right/top/bottom in relation to text (default: above text), configurable gap.
 - **Icon styling**: Separate control for icon color, background, border (width, style, color, radius) and inner padding.
+- **Background frame (optional)**: Add a decorative frame layer behind the icon — from **upload** (image/SVG), from the **icon library** (any built‑in icon as frame), or paste custom SVG (experts). Frame color and hover color are independent of the icon; uploaded SVGs are inlined and recolorable via CSS.
 - **Wrapper styling**: Uses native WordPress block supports for border, spacing and typography on the wrapper.
-- **Animations**: Several presets (float up, pulse, bounce, rotate, shake) with options for duration, repeat (once/loop) and trigger (always/on hover).
-- **Accessibility friendly**: Screen‑reader‑only text option for purely visual icons.
+- **Animations**: Presets (float up, pulse, bounce, rotate, shake) with duration (fast/medium/slow), repeat (once/loop) and trigger (always/on hover). Respects `prefers-reduced-motion`.
+- **Accessibility**: Focus-visible outline on links, optional screen‑reader‑only text, sensible `aria-label` for icon-only links.
 - **Update system**: GitHub‑based updates via the built‑in updater class.
 
 ### Installation
@@ -34,14 +35,15 @@ It is designed as a small, focused plugin that provides a reusable SVG icon set 
 
 ### Usage
 
-- In the block editor, search for **“Icon (WE)”** (or similar label) and insert the block.
+- In the block editor, search for **“Icon”** (WE Icon Blocks) and insert the block.
 - Choose an icon from the library via the block sidebar.
 - Configure:
-  - **Colors** for icon and background.
+  - **Colors** for icon and background (and optional border colors).
   - **Icon border** (width, style, color, radius) and **icon padding** (inner spacing).
-  - **Text** and **position** (left/right/top/bottom) and the gap between icon and text.
-  - **Link** settings if the icon/text should be clickable.
-  - **Animation** type, duration (fast/medium/slow), repeat (once/loop) and trigger (always or only on hover).
+  - **Text** and **icon position** (left/right/above/below text; default: above). Option “Text for screen readers only” hides the label visually but keeps it for assistive tech.
+  - **Link** URL and “Open in new window” if the icon/text should be clickable.
+  - **Background frame** (optional): choose “Upload image/SVG” or “Icon library SVG”, set frame fit and padding, and frame color / frame hover color (SVG only). Users with `unfiltered_html` can enable “Advanced SVG code” to paste custom frame SVG.
+  - **Animation** type, duration (fast/medium/slow), repeat (once/loop) and trigger (always or on hover).
 
 ### Development
 
