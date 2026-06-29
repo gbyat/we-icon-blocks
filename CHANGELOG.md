@@ -1,3 +1,8 @@
+## [0.2.20] - 2026-06-29
+
+- Version update
+
+
 ## [0.2.19] - 2026-02-25
 
 - Update README.md to clarify icon block features, including layout options, animation settings, and accessibility improvements. Adjust usage instructions for better clarity on icon positioning and background frame options.
@@ -147,3 +152,4 @@
 [0.2.17]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.17
 [0.2.18]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.18
 [0.2.19]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.19
+[0.2.20]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.20

@@ -1,0 +1,15 @@
+---
+description: Keep TASK-LOG.md updated on every meaningful code change
+alwaysApply: true
+---
+
+# Task Log Maintenance
+
+- After every code change, append one concise entry to `TASK-LOG.md` under `## Ongoing Time Log`.
+- Entry format:
+ `- YYYY-MM-DD | Scope: <scope> | Started: <HH:MM> | Finished: <HH:MM> | Duration: <duration> | Status: <local|deployed> | Result: <result>.`
+- Include only meaningful changes (features, fixes, regressions, migrations, deploy-impacting edits).
+- Do not rewrite or delete historical entries unless explicitly requested.
+- If multiple small edits belong to one task, combine into one single log entry.
+- If exact timing is unavailable, use `n/a` for Started/Finished/Duration.
+- Before final response, verify that the current task is logged.

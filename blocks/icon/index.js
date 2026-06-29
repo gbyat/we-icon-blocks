@@ -39,6 +39,71 @@ function sanitizeFrameSvg(svgText) {
     return '';
   }
 }
+
+/**
+ * Theme palette from block editor settings (theme + custom colors).
+ */
+function getThemePalette() {
+  if (typeof window === 'undefined' || !window.wp || !window.wp.data) {
+    return [];
+  }
+  try {
+    const blockEditorSelect = window.wp.data.select('core/block-editor');
+    if (blockEditorSelect?.getSettings) {
+      const settings = blockEditorSelect.getSettings();
+      if (settings?.colors?.length) {
+        return settings.colors;
+      }
+    }
+    const editorSelect = window.wp.data.select('core/editor');
+    if (editorSelect?.getEditorSettings) {
+      const settings = editorSelect.getEditorSettings();
+      if (settings?.colors?.length) {
+        return settings.colors;
+      }
+    }
+  } catch (e) {
+    return [];
+  }
+  return [];
+}
+
+/**
+ * Store theme palette picks as CSS variables so global theme color changes apply.
+ */
+function normalizeThemeColorForStorage(color) {
+  if (!color) {
+    return undefined;
+  }
+  if (typeof color !== 'string') {
+    return color;
+  }
+  if (color.startsWith('var(--wp--preset--color--')) {
+    return color;
+  }
+  const normalized = color.toLowerCase();
+  const match = getThemePalette().find(entry => entry.color && entry.color.toLowerCase() === normalized);
+  if (match?.slug) {
+    return `var(--wp--preset--color--${match.slug})`;
+  }
+  return color;
+}
+
+/**
+ * Resolve stored theme CSS variables for the color picker UI.
+ */
+function resolveThemeColorForPicker(color) {
+  if (!color || typeof color !== 'string') {
+    return color;
+  }
+  const varMatch = color.match(/^var\(--wp--preset--color--([^)]+)\)$/);
+  if (!varMatch) {
+    return color;
+  }
+  const slug = varMatch[1];
+  const match = getThemePalette().find(entry => entry.slug === slug);
+  return match?.color || color;
+}
 if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window.wp.element || !window.wp.blocks || !window.wp.blockEditor || !window.wp.components || !window.wp.i18n) {
   // Do not throw – just skip block registration in unsupported contexts.
   // This avoids "wp.element is undefined" errors in the Site Editor.
@@ -446,16 +511,16 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }))), createElement(PanelColorSettings, {
         title: __('Icon Colors', 'we-icon-blocks'),
         colorSettings: [{
-          value: iconColor,
+          value: resolveThemeColorForPicker(iconColor),
           onChange: newColor => setAttributes({
-            iconColor: newColor
+            iconColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Icon color', 'we-icon-blocks'),
           enableAlpha: true
         }, {
-          value: hoverIconColor,
+          value: resolveThemeColorForPicker(hoverIconColor),
           onChange: newColor => setAttributes({
-            hoverIconColor: newColor
+            hoverIconColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Icon color on hover', 'we-icon-blocks'),
           enableAlpha: true
@@ -463,16 +528,16 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }), createElement(PanelColorSettings, {
         title: __('Background Colors', 'we-icon-blocks'),
         colorSettings: [{
-          value: backgroundColor,
+          value: resolveThemeColorForPicker(backgroundColor),
           onChange: newColor => setAttributes({
-            backgroundColor: newColor
+            backgroundColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Background', 'we-icon-blocks'),
           enableAlpha: true
         }, {
-          value: hoverBackgroundColor,
+          value: resolveThemeColorForPicker(hoverBackgroundColor),
           onChange: newColor => setAttributes({
-            hoverBackgroundColor: newColor
+            hoverBackgroundColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Background on hover', 'we-icon-blocks'),
           enableAlpha: true
@@ -480,16 +545,16 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }), createElement(PanelColorSettings, {
         title: __('Border Colors', 'we-icon-blocks'),
         colorSettings: [{
-          value: iconBorderColor,
+          value: resolveThemeColorForPicker(iconBorderColor),
           onChange: newColor => setAttributes({
-            iconBorderColor: newColor
+            iconBorderColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Border color', 'we-icon-blocks'),
           enableAlpha: true
         }, {
-          value: hoverBorderColor,
+          value: resolveThemeColorForPicker(hoverBorderColor),
           onChange: newColor => setAttributes({
-            hoverBorderColor: newColor
+            hoverBorderColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Border color on hover', 'we-icon-blocks'),
           enableAlpha: true
@@ -674,16 +739,16 @@ if (typeof window === 'undefined' || typeof window.wp === 'undefined' || !window
       }), (frameSvgRaw || frameImageUrl) && createElement(PanelColorSettings, {
         title: __('Frame Color (SVG only)', 'we-icon-blocks'),
         colorSettings: [{
-          value: frameColor,
+          value: resolveThemeColorForPicker(frameColor),
           onChange: newColor => setAttributes({
-            frameColor: newColor
+            frameColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Frame color', 'we-icon-blocks'),
           enableAlpha: true
         }, {
-          value: frameHoverColor,
+          value: resolveThemeColorForPicker(frameHoverColor),
           onChange: newColor => setAttributes({
-            frameHoverColor: newColor
+            frameHoverColor: normalizeThemeColorForStorage(newColor)
           }),
           label: __('Frame hover color', 'we-icon-blocks'),
           enableAlpha: true
