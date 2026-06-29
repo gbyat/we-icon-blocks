@@ -1,3 +1,9 @@
+## [0.2.21] - 2026-06-29
+
+- Update TASK-LOG.md to include LF line endings entry and add line endings check in release workflow
+- Add line ending scripts to package.json for better cross-platform compatibility
+
+
 ## [0.2.20] - 2026-06-29
 
 - Version update
@@ -153,3 +159,4 @@
 [0.2.18]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.18
 [0.2.19]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.19
 [0.2.20]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.20
+[0.2.21]: https://github.com/gbyat/we-icon-blocks/releases/tag/v0.2.21
