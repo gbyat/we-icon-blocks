@@ -17,7 +17,9 @@
     "release:major": "node scripts/release.js major",
     "sync-version": "node scripts/sync-version.js",
     "install-hook": "node scripts/install-git-hook.js",
-    "playground": "node scripts/generate-playground-url.js"
+    "playground": "node scripts/generate-playground-url.js",
+    "lint:eol": "node scripts/check-line-endings.js",
+    "fix:eol": "node scripts/normalize-line-endings.js"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
